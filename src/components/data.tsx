@@ -1,5 +1,5 @@
 
-import { MdNotifications, MdSettings, MdAnalytics } from "react-icons/md";
+import { MdNotifications, MdAnalytics } from "react-icons/md";
 import { FaUsers, FaClipboardList, FaBook, FaShieldAlt, FaHistory } from "react-icons/fa";
 
 export const sidebarLinks = [
