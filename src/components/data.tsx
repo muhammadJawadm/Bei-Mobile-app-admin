@@ -11,7 +11,7 @@ export const sidebarLinks = [
   { name: "Notifications", path: "/notifications", icon: <MdNotifications /> },
   { name: "Access Control", path: "/access-control", icon: <FaShieldAlt /> },
   { name: "Admin Logs", path: "/admin-logs", icon: <FaHistory /> },
-  { name: "Settings", path: "/settings", icon: <MdSettings /> },
+  // { name: "Settings", path: "/settings", icon: <MdSettings /> },
 ];
 
 export const transactionsReports = [
