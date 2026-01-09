@@ -31,89 +31,98 @@ ChartJS.register(
 
 const Analytics: React.FC = () => {
     const [dateRange, setDateRange] = useState('7days');
+    const [painVariable, setPainVariable] = useState('averagePain');
+    const [engagementMetric, setEngagementMetric] = useState('dau');
+    const [evolutionVar1, setEvolutionVar1] = useState('exercise');
+    const [evolutionVar2, setEvolutionVar2] = useState('mood');
+    const [evolutionVar3, setEvolutionVar3] = useState('sleep');
 
     const handleExport = () => {
         exportAnalyticsReport(analyticsData);
     };
 
-    // Pain Trends Chart
+    // Pain Trends Chart - Dynamic based on selection
+    const painVariableOptions: { [key: string]: { label: string; data: number[]; color: string } } = {
+        averagePain: { label: 'Average Pain Level', data: analyticsData.painTrends.data, color: 'rgb(239, 68, 68)' },
+        maxPain: { label: 'Maximum Pain Level', data: [7.2, 6.8, 7.5, 6.9, 7.1, 6.5, 6.8, 6.3, 6.6, 5.9, 6.2, 5.8], color: 'rgb(220, 38, 38)' },
+        minPain: { label: 'Minimum Pain Level', data: [4.5, 4.2, 4.8, 4.3, 4.6, 4.0, 4.2, 3.8, 3.9, 3.5, 3.6, 3.2], color: 'rgb(252, 165, 165)' },
+        painFrequency: { label: 'Pain Frequency (episodes/day)', data: [3.5, 3.2, 3.8, 3.1, 3.4, 2.8, 3.0, 2.5, 2.7, 2.2, 2.4, 2.0], color: 'rgb(185, 28, 28)' },
+    };
+
     const painTrendsData = {
         labels: analyticsData.painTrends.labels,
         datasets: [
             {
-                label: 'Average Pain Level',
-                data: analyticsData.painTrends.data,
-                borderColor: 'rgb(239, 68, 68)',
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                label: painVariableOptions[painVariable].label,
+                data: painVariableOptions[painVariable].data,
+                borderColor: painVariableOptions[painVariable].color,
+                backgroundColor: painVariableOptions[painVariable].color.replace('rgb', 'rgba').replace(')', ', 0.1)'),
                 tension: 0.4,
             },
         ],
     };
 
-    // Cognitive Performance Chart
+    // Cognitive Performance Chart - By Module (Pie Chart)
     const cognitiveData = {
-        labels: analyticsData.cognitivePerformance.labels,
+        labels: ['Exercise Module', 'Education Module', 'Cognitive/Mental Training Module', 'Chat Interaction'],
         datasets: [
             {
-                label: 'Performance Score',
-                data: analyticsData.cognitivePerformance.data,
+                label: 'Usage by Module',
+                data: [35, 25, 28, 12],
                 backgroundColor: [
                     'rgba(79, 70, 229, 0.8)',
                     'rgba(124, 58, 237, 0.8)',
                     'rgba(236, 72, 153, 0.8)',
                     'rgba(59, 130, 246, 0.8)',
-                    'rgba(16, 185, 129, 0.8)',
                 ],
                 borderColor: [
                     'rgb(79, 70, 229)',
                     'rgb(124, 58, 237)',
                     'rgb(236, 72, 153)',
                     'rgb(59, 130, 246)',
-                    'rgb(16, 185, 129)',
                 ],
                 borderWidth: 2,
             },
         ],
     };
 
-    // Exercise, Mood, Sleep Evolution
-    const evolutionData = {
-        labels: analyticsData.exerciseMoodSleep.labels,
-        datasets: [
-            {
-                label: 'Exercise (mins)',
-                data: analyticsData.exerciseMoodSleep.exercise,
-                borderColor: 'rgb(59, 130, 246)',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                tension: 0.4,
-                yAxisID: 'y',
-            },
-            {
-                label: 'Mood Score',
-                data: analyticsData.exerciseMoodSleep.mood,
-                borderColor: 'rgb(34, 197, 94)',
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                tension: 0.4,
-                yAxisID: 'y1',
-            },
-            {
-                label: 'Sleep (hours)',
-                data: analyticsData.exerciseMoodSleep.sleep,
-                borderColor: 'rgb(168, 85, 247)',
-                backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                tension: 0.4,
-                yAxisID: 'y1',
-            },
-        ],
+    // Exercise, Mood, Sleep Evolution - Dynamic based on selection
+    const evolutionVariableOptions: { [key: string]: { label: string; data: number[]; color: string } } = {
+        exercise: { label: 'Exercise (mins)', data: analyticsData.exerciseMoodSleep.exercise, color: 'rgb(59, 130, 246)' },
+        mood: { label: 'Mood Score', data: analyticsData.exerciseMoodSleep.mood, color: 'rgb(34, 197, 94)' },
+        sleep: { label: 'Sleep (hours)', data: analyticsData.exerciseMoodSleep.sleep, color: 'rgb(168, 85, 247)' },
     };
 
-    // User Engagement Chart
+    const selectedVars = [evolutionVar1, evolutionVar2, evolutionVar3].filter((v, i, arr) => arr.indexOf(v) === i); // Remove duplicates
+
+    const evolutionData = {
+        labels: analyticsData.exerciseMoodSleep.labels,
+        datasets: selectedVars.map(varKey => ({
+            label: evolutionVariableOptions[varKey].label,
+            data: evolutionVariableOptions[varKey].data,
+            borderColor: evolutionVariableOptions[varKey].color,
+            backgroundColor: evolutionVariableOptions[varKey].color.replace('rgb', 'rgba').replace(')', ', 0.1)'),
+            tension: 0.4,
+        })),
+    };
+
+    // User Engagement Chart - Dynamic based on metric selection
+    const engagementMetricOptions: { [key: string]: { label: string; data: number[] } } = {
+        dau: { label: 'Daily Active Users', data: analyticsData.userEngagement.data },
+        wau: { label: 'Weekly Active Users', data: [1250, 1280, 1320, 1290, 1350, 1400, 1380] },
+        mau: { label: 'Monthly Active Users', data: [4200, 4350, 4500, 4480, 4620, 4750, 4890] },
+        ratio: { label: 'DAU/MAU Ratio (%)', data: [18.5, 19.2, 19.8, 20.1, 20.5, 21.2, 21.8] },
+        inactive7: { label: 'Inactive Users (>7 days)', data: [320, 310, 295, 280, 275, 260, 245] },
+        inactive14: { label: 'Inactive Users (>14 days)', data: [580, 560, 540, 520, 510, 490, 470] },
+        inactive30: { label: 'Inactive Users (>30 days)', data: [890, 870, 850, 830, 810, 790, 760] },
+    };
+
     const engagementData = {
         labels: analyticsData.userEngagement.labels,
         datasets: [
             {
-                label: 'Daily Active Users',
-                data: analyticsData.userEngagement.data,
+                label: engagementMetricOptions[engagementMetric].label,
+                data: engagementMetricOptions[engagementMetric].data,
                 backgroundColor: 'rgba(79, 70, 229, 0.8)',
                 borderColor: 'rgb(79, 70, 229)',
                 borderWidth: 2,
@@ -246,28 +255,95 @@ const Analytics: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 {/* Pain Trends */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{analyticsData.painTrends.title}</h3>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900">Average Pain Level Over Time</h3>
+                        <select
+                            value={painVariable}
+                            onChange={(e) => setPainVariable(e.target.value)}
+                            className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        >
+                            <option value="averagePain">Average Pain Level</option>
+                            <option value="maxPain">Maximum Pain Level</option>
+                            <option value="minPain">Minimum Pain Level</option>
+                            <option value="painFrequency">Pain Frequency</option>
+                        </select>
+                    </div>
                     <Line data={painTrendsData} options={lineChartOptions} />
                 </div>
 
                 {/* User Engagement */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{analyticsData.userEngagement.title}</h3>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900">User Engagement Metrics</h3>
+                        <select
+                            value={engagementMetric}
+                            onChange={(e) => setEngagementMetric(e.target.value)}
+                            className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        >
+                            <option value="dau">Daily Active Users</option>
+                            <option value="wau">Weekly Active Users</option>
+                            <option value="mau">Monthly Active Users</option>
+                            <option value="ratio">DAU/MAU Ratio</option>
+                            <option value="inactive7">Inactive Users (7 days)</option>
+                            <option value="inactive14">Inactive Users (14 days)</option>
+                            <option value="inactive30">Inactive Users (30 days)</option>
+                        </select>
+                    </div>
                     <Bar data={engagementData} options={lineChartOptions} />
                 </div>
             </div>
 
-            {/* Cognitive Performance */}
+            {/* Cognitive Performance and Evolution */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:col-span-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{analyticsData.cognitivePerformance.title}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Usage by Module</h3>
                     <Doughnut data={cognitiveData} />
                 </div>
 
                 {/* Exercise, Mood, Sleep Evolution */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:col-span-2">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{analyticsData.exerciseMoodSleep.title}</h3>
-                    <Line data={evolutionData} options={multiAxisOptions} />
+                    <div className="mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Exercise, Mood & Sleep Evolution</h3>
+                        <div className="grid grid-cols-3 gap-3">
+                            <div>
+                                <label className="block text-xs font-medium text-gray-700 mb-1">Variable 1</label>
+                                <select
+                                    value={evolutionVar1}
+                                    onChange={(e) => setEvolutionVar1(e.target.value)}
+                                    className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                >
+                                    <option value="exercise">Exercise</option>
+                                    <option value="mood">Mood Score</option>
+                                    <option value="sleep">Sleep</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium text-gray-700 mb-1">Variable 2</label>
+                                <select
+                                    value={evolutionVar2}
+                                    onChange={(e) => setEvolutionVar2(e.target.value)}
+                                    className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                >
+                                    <option value="exercise">Exercise</option>
+                                    <option value="mood">Mood Score</option>
+                                    <option value="sleep">Sleep</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium text-gray-700 mb-1">Variable 3</label>
+                                <select
+                                    value={evolutionVar3}
+                                    onChange={(e) => setEvolutionVar3(e.target.value)}
+                                    className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                >
+                                    <option value="exercise">Exercise</option>
+                                    <option value="mood">Mood Score</option>
+                                    <option value="sleep">Sleep</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <Line data={evolutionData} options={lineChartOptions} />
                 </div>
             </div>
 
