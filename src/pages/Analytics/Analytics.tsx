@@ -144,41 +144,6 @@ const Analytics: React.FC = () => {
         },
     };
 
-    const multiAxisOptions = {
-        responsive: true,
-        interaction: {
-            mode: 'index' as const,
-            intersect: false,
-        },
-        plugins: {
-            legend: {
-                position: 'top' as const,
-            },
-        },
-        scales: {
-            y: {
-                type: 'linear' as const,
-                display: true,
-                position: 'left' as const,
-                title: {
-                    display: true,
-                    text: 'Exercise (minutes)',
-                },
-            },
-            y1: {
-                type: 'linear' as const,
-                display: true,
-                position: 'right' as const,
-                title: {
-                    display: true,
-                    text: 'Mood & Sleep',
-                },
-                grid: {
-                    drawOnChartArea: false,
-                },
-            },
-        },
-    };
 
     return (
         <div className="p-6">
