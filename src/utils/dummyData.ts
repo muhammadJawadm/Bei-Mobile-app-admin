@@ -14,6 +14,8 @@ export const dummyUsers = [
             gender: "Female",
             height: "165 cm",
             weight: "62 kg",
+            bmi: "24.3",
+            diagnosedIn: "2024-01-15",
             bloodType: "A+",
             chronicConditions: ["Chronic Back Pain", "Mild Anxiety"],
             medications: ["Ibuprofen 400mg", "Vitamin D3"],
