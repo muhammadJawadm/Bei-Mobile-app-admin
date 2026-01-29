@@ -63,7 +63,7 @@ const UserProfile: React.FC = () => {
             'Age': user.baselineData.age,
             'Gender': user.baselineData.gender,
             'Blood Type': user.baselineData.bloodType,
-            'Chronic Conditions': user.baselineData.chronicConditions.join(', '),
+            'Other Conditions': user.baselineData.otherConditions?.join(', '),
             'Medications': user.baselineData.medications.join(', '),
         }];
 
@@ -74,7 +74,7 @@ const UserProfile: React.FC = () => {
 
         const formattedData = Object.entries(exportData[0]).map(([field, value]) => ({
             field,
-            value: value.toString(),
+            value: value?.toString(),
         }));
 
         exportToPDF(formattedData, columns, `user_${user.id}_profile`, `User Profile: ${user.name}`);
@@ -377,9 +377,9 @@ const UserProfile: React.FC = () => {
                                 <div className="flex items-start gap-3 mb-4">
                                     <FaHeartbeat className="text-red-500 text-xl mt-1" />
                                     <div className="flex-1">
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Chronic Conditions</h3>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Other Conditions</h3>
                                         <div className="flex flex-wrap gap-2">
-                                            {user.baselineData.chronicConditions.map((condition, idx) => (
+                                            {user.baselineData.otherConditions?.map((condition, idx) => (
                                                 <span
                                                     key={idx}
                                                     className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm"
@@ -467,7 +467,6 @@ const UserProfile: React.FC = () => {
                                                         data: [60, 40],
                                                         backgroundColor: ['rgb(239, 68, 68)', 'rgba(239, 68, 68, 0.15)'],
                                                         borderWidth: 0,
-                                                        cutout: '80%',
                                                         rotation: -90,
                                                     }],
                                                 }}
@@ -483,7 +482,6 @@ const UserProfile: React.FC = () => {
                                                         data: [6, 94],
                                                         backgroundColor: ['rgb(34, 197, 94)', 'rgba(34, 197, 94, 0.15)'],
                                                         borderWidth: 0,
-                                                        cutout: '75%',
                                                         rotation: -90,
                                                     }],
                                                 }}
@@ -499,7 +497,6 @@ const UserProfile: React.FC = () => {
                                                         data: [10, 90],
                                                         backgroundColor: ['rgb(6, 182, 212)', 'rgba(6, 182, 212, 0.15)'],
                                                         borderWidth: 0,
-                                                        cutout: '70%',
                                                         rotation: -90,
                                                     }],
                                                 }}
@@ -559,7 +556,7 @@ const UserProfile: React.FC = () => {
                                     </button>
 
                                     {/* Session Cards - Show 3 at a time */}
-                                    <div className="px-14 overflow-hidden">
+                                    <div className="px-8 overflow-hidden">
                                         <div className="flex gap-4 transition-transform duration-300" style={{ transform: `translateX(-${currentSessionIndex * (100 / 3)}%)` }}>
                                             {/* Render sessions with infinite loop logic */}
                                             {[...educationSessions, ...educationSessions, ...educationSessions].map((session, idx) => {
@@ -707,8 +704,380 @@ const UserProfile: React.FC = () => {
                                 </div>
                             </div>
 
+                            {/* Physical Exercise Section */}
+                            <div className="bg-white rounded-lg border border-gray-200 p-6">
+                                <h2 className="text-xl font-bold text-gray-900 mb-6">Physical Exercise</h2>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    {/* Left Column - Your Activity */}
+                                    <div className="lg:col-span-1 ">
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h3 className="text-sm font-semibold text-gray-900">Your Activity</h3>
+                                                <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-600">
+                                                    <option>Today</option>
+                                                    <option>This Week</option>
+                                                    <option>This Month</option>
+                                                </select>
+                                            </div>
+                                            {/* Bar Chart */}
+                                            <div className="flex items-end justify-between gap-2" style={{ height: '240px' }}>
+                                                {[
+                                                    { day: 'Mon', value: 40 },
+                                                    { day: 'Tue', value: 70 },
+                                                    { day: 'Wed', value: 55 },
+                                                    { day: 'Thu', value: 80 },
+                                                    { day: 'Fri', value: 85 },
+                                                    { day: 'Sat', value: 90 },
+                                                    { day: 'Sun', value: 50 },
+                                                ].map((item, idx) => (
+                                                    <div key={idx} className="flex-1 flex flex-col justify-end items-center gap-1">
+                                                        <div className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t shadow-sm" style={{ height: `${Math.round(item.value * 2.4)}px` }}></div>
+                                                        <span className="text-xs text-gray-600 font-medium">{item.day}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    {/* Middle Column - Exercise Table */}
+                                    <div className="lg:col-span-2">
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <div className="overflow-x-auto max-h-68 overflow-y-auto">
+                                                <table className="w-full text-xs">
+                                                    <thead className="sticky top-0 bg-gray-50 z-10">
+                                                        <tr className="border-b border-gray-300">
+                                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">Type of exercise</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Sets</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Reps</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Weight</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Date</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Completed</th>
+                                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">Note</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {[
+                                                            { type: 'One po one Maths tutition', sets: '2', reps: '12', weight: '2kg', date: '26/01/2021', completed: 'Yes', note: null },
+                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: '-', date: '24/01/2021', completed: 'Yes', note: 'Session Postponed' },
+                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Maths Equation', date: '23/01/2021', completed: 'No', note: null },
+                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Vertreibt Wunderbrügge', date: '22/01/2021', completed: 'No', note: null },
+                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Vertreibt Wunderbrügge', date: '22/01/2021', completed: 'No', note: null },
+                                                        ].map((exercise, idx) => (
+                                                            <tr key={idx} className="border-b border-gray-200">
+                                                                <td className="py-2 px-2 text-gray-700">{exercise.type}</td>
+                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.sets}</td>
+                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.reps}</td>
+                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.weight}</td>
+                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.date}</td>
+                                                                <td className="py-2 px-2 text-center">
+                                                                    <span className={`px-2 py-0.5 rounded text-xs ${exercise.completed === 'Yes' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                                        {exercise.completed}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="py-2 px-2 text-gray-700">{exercise.note || '-'}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Health Metrics and Linked Device */}
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                                    {/* Health Metrics Cards */}
+                                    <div className="lg:col-span-2">
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            {/* Pain */}
+                                            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 relative overflow-hidden">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                        <span className="text-white text-xs">❤️</span>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs text-gray-600">Pain</p>
+                                                        <p className="text-xl font-bold text-gray-900">30</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                                {/* Mini sparkline chart */}
+                                                <svg width="100%" height="40" className="relative z-10">
+                                                    <defs>
+                                                        <linearGradient id="painGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                            <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 0.3 }} />
+                                                            <stop offset="100%" style={{ stopColor: '#ef4444', stopOpacity: 0.05 }} />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <path d="M 0,30 Q 15,20 30,25 T 60,15 T 90,20 T 120,10" stroke="#ef4444" strokeWidth="2" fill="none" />
+                                                    <path d="M 0,30 Q 15,20 30,25 T 60,15 T 90,20 T 120,10 L 120,40 L 0,40 Z" fill="url(#painGradient)" />
+                                                </svg>
+                                            </div>
+
+                                            {/* Fatigue */}
+                                            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 relative overflow-hidden">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                        <span className="text-white text-xs">😴</span>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs text-gray-600">Fatigue</p>
+                                                        <p className="text-xl font-bold text-gray-900">15</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                                {/* Mini sparkline chart */}
+                                                <svg width="100%" height="40" className="relative z-10">
+                                                    <defs>
+                                                        <linearGradient id="fatigueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                            <stop offset="0%" style={{ stopColor: '#8b5cf6', stopOpacity: 0.3 }} />
+                                                            <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 0.05 }} />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <path d="M 0,25 Q 15,15 30,20 T 60,10 T 90,15 T 120,8" stroke="#8b5cf6" strokeWidth="2" fill="none" />
+                                                    <path d="M 0,25 Q 15,15 30,20 T 60,10 T 90,15 T 120,8 L 120,40 L 0,40 Z" fill="url(#fatigueGradient)" />
+                                                </svg>
+                                            </div>
+
+                                            {/* Stress */}
+                                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 relative overflow-hidden">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                        <span className="text-white text-xs">😰</span>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs text-gray-600">Stress</p>
+                                                        <p className="text-xl font-bold text-gray-900">45</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                                {/* Mini sparkline chart */}
+                                                <svg width="100%" height="40" className="relative z-10">
+                                                    <defs>
+                                                        <linearGradient id="stressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                            <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 0.3 }} />
+                                                            <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.05 }} />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <path d="M 0,20 Q 15,25 30,18 T 60,22 T 90,18 T 120,25" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                                                    <path d="M 0,20 Q 15,25 30,18 T 60,22 T 90,18 T 120,25 L 120,40 L 0,40 Z" fill="url(#stressGradient)" />
+                                                </svg>
+                                            </div>
+
+                                            {/* Borg Scale */}
+                                            <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg p-4 relative overflow-hidden">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                        <span className="text-white text-xs">💪</span>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs text-gray-600">Borg Scale</p>
+                                                        <p className="text-xl font-bold text-gray-900">30</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                                {/* Mini sparkline chart */}
+                                                <svg width="100%" height="40" className="relative z-10">
+                                                    <defs>
+                                                        <linearGradient id="borgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                            <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 0.3 }} />
+                                                            <stop offset="100%" style={{ stopColor: '#ec4899', stopOpacity: 0.05 }} />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <path d="M 0,28 Q 15,22 30,26 T 60,18 T 90,24 T 120,15" stroke="#ec4899" strokeWidth="2" fill="none" />
+                                                    <path d="M 0,28 Q 15,22 30,26 T 60,18 T 90,24 T 120,15 L 120,40 L 0,40 Z" fill="url(#borgGradient)" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mt-3 text-center">This should open the linked device page</p>
+                                    </div>
+
+                                    {/* Linked Device */}
+                                    <div className="lg:col-span-1">
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <h3 className="text-sm font-semibold text-gray-900">Linked Device</h3>
+                                                <button className="text-lg">⋮</button>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-12 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
+                                                    <span className="text-2xl">⌚</span>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-semibold text-gray-900">Smart Watch</p>
+                                                    <p className="text-xs text-gray-600">Amazfit Kratos</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Mental Exercise Section */}
+                            <div className="bg-white rounded-lg border border-gray-200 p-6">
+                                <h2 className="text-xl font-bold text-gray-900 mb-6">Mental Exercise</h2>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    {/* Left Column - Your Activity */}
+                                    <div className="lg:col-span-1">
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h3 className="text-sm font-semibold text-gray-900">Your Activity</h3>
+                                                <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-600">
+                                                    <option>Today</option>
+                                                    <option>This Week</option>
+                                                    <option>This Month</option>
+                                                </select>
+                                            </div>
+                                            {/* Bar Chart */}
+                                            <div className="flex items-end justify-between gap-2" style={{ height: '240px' }}>
+                                                {[
+                                                    { day: 'Mon', value: 35 },
+                                                    { day: 'Tue', value: 60 },
+                                                    { day: 'Wed', value: 80 },
+                                                    { day: 'Thu', value: 70 },
+                                                    { day: 'Fri', value: 85 },
+                                                    { day: 'Sat', value: 65 },
+                                                    { day: 'Sun', value: 45 },
+                                                ].map((item, idx) => (
+                                                    <div key={idx} className="flex-1 flex flex-col justify-end items-center gap-1">
+                                                        <div className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t shadow-sm" style={{ height: `${Math.round(item.value * 2.4)}px` }}></div>
+                                                        <span className="text-xs text-gray-600 font-medium">{item.day}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Middle Column - Exercise Table */}
+                                    <div className="lg:col-span-1">
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <div className='overflow-x-auto max-h-68 overflow-y-auto'>
+                                                <table className="w-full text-xs">
+                                                    <thead>
+                                                        <tr className="border-b border-gray-300">
+                                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">Type of exercise</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Minutes</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Result</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Date</th>
+                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Completed</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {[
+                                                            { type: 'One po one Maths tuition', minutes: '30', result: 'Better Brain', date: '26/01/2025', completed: 'Yes' },
+                                                            { type: 'One po one Maths tuition', minutes: '25', result: 'Barnch Cunition', date: '25/01/2025', completed: 'Yes' },
+                                                            { type: 'One po one Maths tuition', minutes: '40', result: 'Howard Heaverad', date: '24/01/2025', completed: 'Yes' },
+                                                            { type: 'One po one Maths tuition', minutes: '20', result: 'Maths Equation', date: '23/01/2025', completed: 'No' },
+                                                            { type: 'One po one Maths tuition', minutes: '15', result: 'Vertreibt Wunderbrügge', date: '22/01/2025', completed: 'No' },
+                                                            { type: 'One po one Maths tuition', minutes: '35', result: 'Practice Register', date: '21/01/2025', completed: 'No' },
+                                                        ].map((exercise, idx) => (
+                                                            <tr key={idx} className="border-b border-gray-200 h-2/3 overflow-y-auto">
+                                                                <td className="py-2 px-2 text-gray-700">{exercise.type}</td>
+                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.minutes}</td>
+                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.result}</td>
+                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.date}</td>
+                                                                <td className="py-2 px-2 text-center">
+                                                                    <span className={`px-2 py-0.5 rounded text-xs ${exercise.completed === 'Yes' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                                        {exercise.completed}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Column - Cognitive Domains */}
+                                    <div className="lg:col-span-1">
+                                        <div className="bg-gray-50 rounded-lg p-4 max-h-68 ">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h3 className="text-sm font-semibold text-gray-900">Cognitive domains</h3>
+                                                <span className="px-2 py-1 bg-gray-900 text-white text-xs font-semibold rounded">TODAY</span>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                {/* Inhibitory control */}
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-xs text-gray-700">Inhibitory control</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xs text-gray-500">30%</span>
+                                                            <span className="text-xs text-gray-500">70%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '70%' }}></div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Selective attention */}
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-xs text-gray-700">Selective attention</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xs text-gray-500">45%</span>
+                                                            <span className="text-xs text-gray-500">55%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '55%' }}></div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Working memory */}
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-xs text-gray-700">Working memory</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xs text-gray-500">25%</span>
+                                                            <span className="text-xs text-gray-500">75%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '75%' }}></div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Cognitive flexibility */}
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-xs text-gray-700">Cognitive flexibility</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xs text-gray-500">50%</span>
+                                                            <span className="text-xs text-gray-500">44%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '44%' }}></div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Sustained attention */}
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-xs text-gray-700">Sustained attention</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xs text-gray-500">34%</span>
+                                                            <span className="text-xs text-gray-500">60%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '60%' }}></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Existing Charts */}
-                            <div>
+                            {/* <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Pain & Mood Trends</h3>
                                 <div className="bg-gray-50 rounded-lg p-4">
                                     <Line data={progressChartData} options={chartOptions} />
@@ -719,7 +1088,7 @@ const UserProfile: React.FC = () => {
                                 <div className="bg-gray-50 rounded-lg p-4">
                                     <Line data={exerciseSleepChartData} options={chartOptions} />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     )}
                 </div>

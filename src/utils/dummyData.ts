@@ -17,7 +17,7 @@ export const dummyUsers = [
             bmi: "24.3",
             diagnosedIn: "2024-01-15",
             bloodType: "A+",
-            chronicConditions: ["Chronic Back Pain", "Mild Anxiety"],
+            otherConditions: ["Chronic Back Pain", "Mild Anxiety"],
             medications: ["Ibuprofen 400mg", "Vitamin D3"],
         },
         phenotype: {
@@ -49,7 +49,7 @@ export const dummyUsers = [
             height: "178 cm",
             weight: "82 kg",
             bloodType: "O+",
-            chronicConditions: ["Type 2 Diabetes", "Hypertension"],
+            otherConditions: ["Type 2 Diabetes", "Hypertension"],
             medications: ["Metformin 500mg", "Lisinopril 10mg"],
         },
         phenotype: {
