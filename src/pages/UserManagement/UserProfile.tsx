@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Line, Doughnut } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -81,96 +81,7 @@ const UserProfile: React.FC = () => {
     };
 
     // Progress chart data
-    const progressChartData = {
-        labels: user.progress.dates,
-        datasets: [
-            {
-                label: 'Pain Level',
-                data: user.progress.painLevelTrend,
-                borderColor: 'rgb(239, 68, 68)',
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                tension: 0.4,
-            },
-            {
-                label: 'Mood Score',
-                data: user.progress.moodScores,
-                borderColor: 'rgb(34, 197, 94)',
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                tension: 0.4,
-            },
-        ],
-    };
-
-    const exerciseSleepChartData = {
-        labels: user.progress.dates,
-        datasets: [
-            {
-                label: 'Exercise Minutes',
-                data: user.progress.exerciseMinutes,
-                borderColor: 'rgb(59, 130, 246)',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                tension: 0.4,
-            },
-            {
-                label: 'Sleep Hours',
-                data: user.progress.sleepHours,
-                borderColor: 'rgb(168, 85, 247)',
-                backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                tension: 0.4,
-            },
-        ],
-    };
-
-    const chartOptions = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top' as const,
-            },
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-            },
-        },
-    };
-
-    // Activity Ring Charts Data
-    const educationActivityData = {
-        labels: ['Completed', 'Remaining'],
-        datasets: [
-            {
-                data: [60, 40],
-                backgroundColor: ['rgb(239, 68, 68)', 'rgba(239, 68, 68, 0.1)'],
-                borderWidth: 0,
-                cutout: '75%',
-            },
-        ],
-    };
-
-    const exerciseActivityData = {
-        labels: ['Completed', 'Remaining'],
-        datasets: [
-            {
-                data: [6, 94],
-                backgroundColor: ['rgb(34, 197, 94)', 'rgba(34, 197, 94, 0.1)'],
-                borderWidth: 0,
-                cutout: '75%',
-            },
-        ],
-    };
-
-    const mentalTrainingData = {
-        labels: ['Completed', 'Remaining'],
-        datasets: [
-            {
-                data: [10, 90],
-                backgroundColor: ['rgb(59, 130, 246)', 'rgba(59, 130, 246, 0.1)'],
-                borderWidth: 0,
-                cutout: '75%',
-            },
-        ],
-    };
+    // Unused chart data removed
 
     const activityChartOptions = {
         responsive: true,
@@ -632,7 +543,7 @@ const UserProfile: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="space-y-1">
-                                            {[1, 2, 3, 4, 5, 6, 7].map((day, idx) => (
+                                            {[1, 2, 3, 4, 5, 6, 7].map((_, idx) => (
                                                 <div key={idx} className="flex items-center gap-1">
                                                     <div className="flex-1 bg-gray-100 rounded-sm overflow-hidden h-1">
                                                         <div
@@ -662,7 +573,7 @@ const UserProfile: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="space-y-1">
-                                            {[1, 2, 3, 4, 5, 6, 7].map((day, idx) => (
+                                            {[1, 2, 3, 4, 5, 6, 7].map((_, idx) => (
                                                 <div key={idx} className="flex items-center gap-1">
                                                     <div className="flex-1 bg-gray-100 rounded-sm overflow-hidden h-1">
                                                         <div
@@ -954,9 +865,9 @@ const UserProfile: React.FC = () => {
                                     {/* Middle Column - Exercise Table */}
                                     <div className="lg:col-span-1">
                                         <div className="bg-gray-50 rounded-lg p-4">
-                                            <div className='overflow-x-auto max-h-68 overflow-y-auto'>
+                                            <div className="overflow-x-auto max-h-64 overflow-y-auto">
                                                 <table className="w-full text-xs">
-                                                    <thead>
+                                                    <thead className="sticky top-0 bg-gray-50 z-10">
                                                         <tr className="border-b border-gray-300">
                                                             <th className="text-left py-2 px-2 font-semibold text-gray-900">Type of exercise</th>
                                                             <th className="text-center py-2 px-2 font-semibold text-gray-900">Minutes</th>
@@ -974,7 +885,7 @@ const UserProfile: React.FC = () => {
                                                             { type: 'One po one Maths tuition', minutes: '15', result: 'Vertreibt Wunderbrügge', date: '22/01/2025', completed: 'No' },
                                                             { type: 'One po one Maths tuition', minutes: '35', result: 'Practice Register', date: '21/01/2025', completed: 'No' },
                                                         ].map((exercise, idx) => (
-                                                            <tr key={idx} className="border-b border-gray-200 h-2/3 overflow-y-auto">
+                                                            <tr key={idx} className="border-b border-gray-200">
                                                                 <td className="py-2 px-2 text-gray-700">{exercise.type}</td>
                                                                 <td className="py-2 px-2 text-center text-gray-700">{exercise.minutes}</td>
                                                                 <td className="py-2 px-2 text-center text-gray-700">{exercise.result}</td>
