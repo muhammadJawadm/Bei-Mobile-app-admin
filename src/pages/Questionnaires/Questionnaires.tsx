@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaExclamationTriangle, FaCheckCircle, FaFileAlt, FaUser, FaCalendar, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaExclamationTriangle, FaCheckCircle, FaFileAlt, FaUser, FaCalendar, FaPlus, FaTrash, FaEdit, FaEye } from 'react-icons/fa';
 import { questionnaireResponses } from '../../utils/dummyData';
 import { exportQuestionnaireData } from '../../utils/exportUtils';
 import FilterPanel from '../../components/FilterPanel';
@@ -95,11 +95,7 @@ const Questionnaires: React.FC = () => {
     ];
 
     const columns = [
-        {
-            key: 'id',
-            label: 'ID',
-            sortable: true,
-        },
+
         {
             key: 'userName',
             label: 'User',
@@ -188,6 +184,46 @@ const Questionnaires: React.FC = () => {
                 </div>
             ),
         },
+        {
+            key: 'actions',
+            label: 'Actions',
+            sortable: false,
+            render: (_: any, response: any) => (
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/questionnaires/${response.id}`);
+                        }}
+                        className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                        title="View Details"
+                    >
+                        <FaEye />
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('Edit questionnaire:', response.id);
+                        }}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="Edit Questionnaire"
+                    >
+                        <FaEdit />
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('Delete questionnaire:', response.id);
+                        }}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete Questionnaire"
+                    >
+                        <FaTrash />
+                    </button>
+                </div>
+            ),
+        },
+
     ];
 
     return (

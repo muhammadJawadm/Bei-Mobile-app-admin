@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaEnvelope, FaPhone, FaCalendar, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaCalendar, FaCheckCircle, FaTimesCircle, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { dummyUsers } from '../../utils/dummyData';
 import { exportUserData } from '../../utils/exportUtils';
 import FilterPanel from '../../components/FilterPanel';
@@ -59,11 +59,7 @@ const UserManagement: React.FC = () => {
     ];
 
     const columns = [
-        {
-            key: 'id',
-            label: 'User ID',
-            sortable: true,
-        },
+
         {
             key: 'name',
             label: 'Name',
@@ -117,8 +113,8 @@ const UserManagement: React.FC = () => {
             render: (value: string) => (
                 <span
                     className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${value === 'Active'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-gray-100 text-gray-800'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-gray-100 text-gray-800'
                         }`}
                 >
                     {value === 'Active' ? (
@@ -128,6 +124,45 @@ const UserManagement: React.FC = () => {
                     )}
                     {value}
                 </span>
+            ),
+        },
+        {
+            key: 'actions',
+            label: 'Actions',
+            sortable: false,
+            render: (_: any, user: any) => (
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/user-management/${user.id}`);
+                        }}
+                        className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                        title="View Details"
+                    >
+                        <FaEye />
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('Edit user:', user.id);
+                        }}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="Edit User"
+                    >
+                        <FaEdit />
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('Delete user:', user.id);
+                        }}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete User"
+                    >
+                        <FaTrash />
+                    </button>
+                </div>
             ),
         },
     ];
