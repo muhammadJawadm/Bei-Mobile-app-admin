@@ -31,7 +31,6 @@ ChartJS.register(
 const UserProfile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState<'baseline' | 'phenotype' | 'progress'>('baseline');
     const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
 
     const user = dummyUsers.find(u => u.id === id);
@@ -215,780 +214,1014 @@ const UserProfile: React.FC = () => {
                 </div>
             </div>
 
-            {/* Tabs */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <div className="border-b border-gray-200">
-                    <div className="flex">
-                        <button
-                            onClick={() => setActiveTab('baseline')}
-                            className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${activeTab === 'baseline'
-                                ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                                }`}
-                        >
-                            Baseline Data
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('phenotype')}
-                            className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${activeTab === 'phenotype'
-                                ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                                }`}
-                        >
-                            Phenotype
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('progress')}
-                            className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${activeTab === 'progress'
-                                ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                                }`}
-                        >
-                            Progress
-                        </button>
+            <div className="space-y-6">
+
+                {/* Baseline Data */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-6">Baseline Data</h2>
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Age</p>
+                                <p className="text-2xl font-bold text-gray-900">{user.baselineData.age} years</p>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Gender</p>
+                                <p className="text-2xl font-bold text-gray-900">{user.baselineData.gender}</p>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Blood Type</p>
+                                <p className="text-2xl font-bold text-gray-900">{user.baselineData.bloodType}</p>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Height</p>
+                                <p className="text-2xl font-bold text-gray-900">{user.baselineData.height}</p>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Weight</p>
+                                <p className="text-2xl font-bold text-gray-900">{user.baselineData.weight}</p>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">BMI</p>
+                                <p className="text-2xl font-bold text-gray-900">{user.baselineData.bmi}</p>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Diagnosed In</p>
+                                <p className="text-2xl font-bold text-gray-900">{user.baselineData.diagnosedIn}</p>
+                            </div>
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-6">
+                            <div className="flex items-start gap-3 mb-4">
+                                <FaHeartbeat className="text-red-500 text-xl mt-1" />
+                                <div className="flex-1">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Other Conditions</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {user.baselineData.otherConditions?.map((condition, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm"
+                                            >
+                                                {condition}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-6">
+                            <div className="flex items-start gap-3">
+                                <FaPills className="text-blue-500 text-xl mt-1" />
+                                <div className="flex-1">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Medications</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {user.baselineData.medications.map((medication, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                                            >
+                                                {medication}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="p-6">
-                    {/* Baseline Data Tab */}
-                    {activeTab === 'baseline' && (
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600 mb-1">Age</p>
-                                    <p className="text-2xl font-bold text-gray-900">{user.baselineData.age} years</p>
+                {/* Phenotype */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-6">Phenotype</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-6">
+                            <p className="text-sm text-red-700 mb-2">Pain Sensitivity</p>
+                            <p className="text-3xl font-bold text-red-900">{user.phenotype.painSensitivity}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6">
+                            <p className="text-sm text-orange-700 mb-2">Stress Response</p>
+                            <p className="text-3xl font-bold text-orange-900">{user.phenotype.stressResponse}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6">
+                            <p className="text-sm text-purple-700 mb-2">Sleep Quality</p>
+                            <p className="text-3xl font-bold text-purple-900">{user.phenotype.sleepQuality}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6">
+                            <p className="text-sm text-blue-700 mb-2">Physical Activity</p>
+                            <p className="text-3xl font-bold text-blue-900">{user.phenotype.physicalActivity}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6">
+                            <p className="text-sm text-green-700 mb-2">Diet Quality</p>
+                            <p className="text-3xl font-bold text-green-900">{user.phenotype.dietQuality}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg p-6">
+                            <p className="text-sm text-indigo-700 mb-2">Cognitive Function</p>
+                            <p className="text-3xl font-bold text-indigo-900">{user.phenotype.cognitiveFunction}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Progress */}
+                <div className="space-y-6">
+                    {/* Activity Section */}
+                    <div className="bg-gradient-to-br from-black via-violet-900 to-purple-900 rounded-lg p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-lg font-semibold text-white">Activity</h3>
+                            <span className="text-xs text-purple-300 flex items-center gap-1">
+                                <span className="w-2 h-2 bg-fuchsia-400 rounded-full"></span>
+                                Real Time
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-8">
+                            {/* Concentric Rings */}
+                            <div className="relative w-48 h-48 flex-shrink-0">
+                                {/* Outer Ring - Education (Fuchsia) */}
+                                <div className="absolute inset-0">
+                                    <Doughnut
+                                        data={{
+                                            labels: ['Completed', 'Remaining'],
+                                            datasets: [{
+                                                data: [60, 40],
+                                                backgroundColor: ['rgb(217, 20, 239)', 'rgba(217, 70, 239, 0.15)'],
+                                                borderWidth: 0,
+                                                rotation: -90,
+                                            }],
+                                        }}
+                                        options={activityChartOptions}
+                                    />
                                 </div>
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600 mb-1">Gender</p>
-                                    <p className="text-2xl font-bold text-gray-900">{user.baselineData.gender}</p>
+                                {/* Middle Ring - Exercise (Purple) */}
+                                <div className="absolute inset-4">
+                                    <Doughnut
+                                        data={{
+                                            labels: ['Completed', 'Remaining'],
+                                            datasets: [{
+                                                data: [6, 94],
+                                                backgroundColor: ['rgb(168, 120, 247)', 'rgba(168, 120, 247, 0.15)'],
+                                                borderWidth: 0,
+                                                rotation: -90,
+                                            }],
+                                        }}
+                                        options={activityChartOptions}
+                                    />
                                 </div>
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600 mb-1">Blood Type</p>
-                                    <p className="text-2xl font-bold text-gray-900">{user.baselineData.bloodType}</p>
-                                </div>
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600 mb-1">Height</p>
-                                    <p className="text-2xl font-bold text-gray-900">{user.baselineData.height}</p>
-                                </div>
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600 mb-1">Weight</p>
-                                    <p className="text-2xl font-bold text-gray-900">{user.baselineData.weight}</p>
-                                </div>
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600 mb-1">BMI</p>
-                                    <p className="text-2xl font-bold text-gray-900">{user.baselineData.bmi}</p>
-                                </div>
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600 mb-1">Diagnosed In</p>
-                                    <p className="text-2xl font-bold text-gray-900">{user.baselineData.diagnosedIn}</p>
+                                {/* Inner Ring - Mental (Violet) */}
+                                <div className="absolute inset-8">
+                                    <Doughnut
+                                        data={{
+                                            labels: ['Completed', 'Remaining'],
+                                            datasets: [{
+                                                data: [10, 90],
+                                                backgroundColor: ['rgb(124, 58, 237)', 'rgba(124, 58, 237, 0.15)'],
+                                                borderWidth: 0,
+                                                rotation: -90,
+                                            }],
+                                        }}
+                                        options={activityChartOptions}
+                                    />
                                 </div>
                             </div>
 
-                            <div className="border-t border-gray-200 pt-6">
-                                <div className="flex items-start gap-3 mb-4">
-                                    <FaHeartbeat className="text-red-500 text-xl mt-1" />
-                                    <div className="flex-1">
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Other Conditions</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {user.baselineData.otherConditions?.map((condition, idx) => (
-                                                <span
-                                                    key={idx}
-                                                    className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm"
-                                                >
-                                                    {condition}
-                                                </span>
-                                            ))}
-                                        </div>
+                            {/* Labels */}
+                            <div className="flex flex-col gap-4">
+                                {/* Education */}
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-fuchsia-500/20 flex items-center justify-center">
+                                        <span className="text-fuchsia-400 text-lg">→</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-fuchsia-300 font-semibold">Education 60%</p>
+                                        <p className="text-white text-lg font-bold">⅔ lessons</p>
+                                    </div>
+                                </div>
+
+                                {/* Exercise */}
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+                                        <span className="text-purple-400 text-lg">→</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-purple-300 font-semibold">EXERCISE 6%</p>
+                                        <p className="text-white text-lg font-bold">2/30 MIN</p>
+                                    </div>
+                                </div>
+
+                                {/* Mental Training */}
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-violet-500/20 flex items-center justify-center">
+                                        <span className="text-violet-400 text-lg">↑</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-violet-300 font-semibold">Mental training 10%</p>
+                                        <p className="text-white text-lg font-bold">1/3 activities</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div className="border-t border-gray-200 pt-6">
-                                <div className="flex items-start gap-3">
-                                    <FaPills className="text-blue-500 text-xl mt-1" />
-                                    <div className="flex-1">
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Medications</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {user.baselineData.medications.map((medication, idx) => (
-                                                <span
-                                                    key={idx}
-                                                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                                                >
-                                                    {medication}
-                                                </span>
-                                            ))}
+                    {/* Key Areas of Concern */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-6">Key Areas of Concern</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {/* Education */}
+                            <div>
+                                <div className="flex items-baseline justify-between mb-2">
+                                    <span className="text-sm text-gray-600">{educationConcernData.label}</span>
+                                    <button className="text-xs text-blue-600">Detail</button>
+                                </div>
+                                <div className="mb-3">
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-3xl font-bold text-blue-600">{educationConcernData.value}</span>
+                                        <span className="text-sm text-gray-500">{educationConcernData.unit}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="text-xs text-gray-500">Your Best Goal</span>
+                                        <span className="text-xs text-gray-900 font-medium">{educationConcernData.goal}{educationConcernData.unit}daily</span>
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    {[1, 2, 3, 4, 5, 6, 7].map((_, idx) => (
+                                        <div key={idx} className="flex items-center gap-1">
+                                            <div className="flex-1 bg-gray-100 rounded-sm overflow-hidden h-1">
+                                                <div
+                                                    className="h-full bg-blue-500 rounded-sm"
+                                                    style={{ width: `${Math.random() * 100}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Physical */}
+                            <div>
+                                <div className="flex items-baseline justify-between mb-2">
+                                    <span className="text-sm text-gray-600">{physicalConcernData.label}</span>
+                                    <button className="text-xs text-blue-600">Detail</button>
+                                </div>
+                                <div className="mb-3">
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-3xl font-bold text-blue-600">{physicalConcernData.value}</span>
+                                        <span className="text-sm text-gray-500">{physicalConcernData.unit}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="text-xs text-gray-500">Your Best Goal</span>
+                                        <span className="text-xs text-gray-900 font-medium">{physicalConcernData.goal}{physicalConcernData.unit}daily</span>
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    {[1, 2, 3, 4, 5, 6, 7].map((_, idx) => (
+                                        <div key={idx} className="flex items-center gap-1">
+                                            <div className="flex-1 bg-gray-100 rounded-sm overflow-hidden h-1">
+                                                <div
+                                                    className="h-full bg-blue-500 rounded-sm"
+                                                    style={{ width: `${Math.random() * 100}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Mental */}
+                            <div>
+                                <div className="flex items-baseline justify-between mb-2">
+                                    <span className="text-sm text-gray-600">{mentalConcernData.label}</span>
+                                    <button className="text-xs text-blue-600">Detail</button>
+                                </div>
+                                <div className="mb-3">
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-3xl font-bold text-blue-600">{mentalConcernData.value}</span>
+                                        <span className="text-sm text-gray-500">{mentalConcernData.unit}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="text-xs text-gray-500">Your Best Goal</span>
+                                        <span className="text-xs text-gray-900 font-medium">{mentalConcernData.goal}{mentalConcernData.unit}</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-sm text-gray-600">more than</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <div className="w-8 h-8 bg-blue-100 rounded"></div>
+                                        <div className="w-12 h-8 bg-blue-600 rounded"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Education Sessions Carousel */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Education</h3>
+                        <div className="relative">
+                            {/* Left Arrow */}
+                            <button
+                                onClick={handlePrevSession}
+                                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200"
+                            >
+                                <span className="text-gray-600 text-xl">←</span>
+                            </button>
+
+                            {/* Session Cards - Show 3 at a time */}
+                            <div className="px-8 overflow-hidden">
+                                <div className="flex gap-4 transition-transform duration-300" style={{ transform: `translateX(-${currentSessionIndex * (100 / 3)}%)` }}>
+                                    {/* Render sessions with infinite loop logic */}
+                                    {[...educationSessions, ...educationSessions, ...educationSessions].map((session, idx) => {
+                                        const colorClasses = getColorClasses(session.color);
+                                        return (
+                                            <div key={`session-${idx}`} className="w-1/3 flex-shrink-0 px-2">
+                                                <div className={`bg-gradient-to-br ${colorClasses.bg} rounded-xl p-4 border ${colorClasses.border}`}>
+                                                    <div className="flex items-start gap-3 mb-4">
+                                                        <div className={`w-10 h-10 ${colorClasses.icon} rounded-lg flex items-center justify-center`}>
+                                                            <span className="text-lg">{session.icon}</span>
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <span className={`inline-block px-2 py-0.5 ${colorClasses.badge} text-white text-xs rounded-full mb-1`}>
+                                                                Session {session.id}
+                                                            </span>
+                                                            <p className="text-gray-700 font-medium">29 min.</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            {session.percentage ? (
+                                                                <>
+                                                                    <p className={`text-xs font-medium ${session.percentage.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
+                                                                        {session.percentage}
+                                                                    </p>
+                                                                    <p className="text-xs text-gray-500">{session.dateInfo.label}</p>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <p className="text-xs text-gray-400">{session.dateInfo.label}</p>
+                                                                    <p className="text-xs text-gray-500">{session.dateInfo.value}</p>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-sm text-gray-600">Correct answers:</span>
+                                                        <span className="text-sm font-bold text-gray-900">{session.correctAnswers}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Right Arrow */}
+                            <button
+                                onClick={handleNextSession}
+                                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200"
+                            >
+                                <span className="text-gray-600 text-xl">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                    {/* Physical Exercise Section */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6">Physical Exercise</h2>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Left Column - Your Activity */}
+                            <div className="lg:col-span-1 ">
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-sm font-semibold text-gray-900">Your Activity</h3>
+                                        <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-600">
+                                            <option>Today</option>
+                                            <option>This Week</option>
+                                            <option>This Month</option>
+                                        </select>
+                                    </div>
+                                    {/* Bar Chart */}
+                                    <div className="flex items-end justify-between gap-2" style={{ height: '240px' }}>
+                                        {[
+                                            { day: 'Mon', value: 40 },
+                                            { day: 'Tue', value: 70 },
+                                            { day: 'Wed', value: 55 },
+                                            { day: 'Thu', value: 80 },
+                                            { day: 'Fri', value: 85 },
+                                            { day: 'Sat', value: 90 },
+                                            { day: 'Sun', value: 50 },
+                                        ].map((item, idx) => (
+                                            <div key={idx} className="flex-1 flex flex-col justify-end items-center gap-1">
+                                                <div className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t shadow-sm" style={{ height: `${Math.round(item.value * 2.4)}px` }}></div>
+                                                <span className="text-xs text-gray-600 font-medium">{item.day}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {/* Middle Column - Exercise Table */}
+                            <div className="lg:col-span-2">
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <div className="overflow-x-auto max-h-68 overflow-y-auto">
+                                        <table className="w-full text-xs">
+                                            <thead className="sticky top-0 bg-gray-50 z-10">
+                                                <tr className="border-b border-gray-300">
+                                                    <th className="text-left py-2 px-2 font-semibold text-gray-900">Type of exercise</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Sets</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Reps</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Weight</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Date</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Completed</th>
+                                                    <th className="text-left py-2 px-2 font-semibold text-gray-900">Note</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {[
+                                                    { type: 'One po one Maths tutition', sets: '2', reps: '12', weight: '2kg', date: '26/01/2021', completed: 'Yes', note: null },
+                                                    { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: '-', date: '24/01/2021', completed: 'Yes', note: 'Session Postponed' },
+                                                    { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Maths Equation', date: '23/01/2021', completed: 'No', note: null },
+                                                    { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Vertreibt Wunderbrügge', date: '22/01/2021', completed: 'No', note: null },
+                                                    { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Vertreibt Wunderbrügge', date: '22/01/2021', completed: 'No', note: null },
+                                                ].map((exercise, idx) => (
+                                                    <tr key={idx} className="border-b border-gray-200">
+                                                        <td className="py-2 px-2 text-gray-700">{exercise.type}</td>
+                                                        <td className="py-2 px-2 text-center text-gray-700">{exercise.sets}</td>
+                                                        <td className="py-2 px-2 text-center text-gray-700">{exercise.reps}</td>
+                                                        <td className="py-2 px-2 text-center text-gray-700">{exercise.weight}</td>
+                                                        <td className="py-2 px-2 text-center text-gray-700">{exercise.date}</td>
+                                                        <td className="py-2 px-2 text-center">
+                                                            <span className={`px-2 py-0.5 rounded text-xs ${exercise.completed === 'Yes' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                                {exercise.completed}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-2 px-2 text-gray-700">{exercise.note || '-'}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Health Metrics and Linked Device */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                            {/* Health Metrics Cards */}
+                            <div className="lg:col-span-2">
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {/* Pain */}
+                                    <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 relative overflow-hidden">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                <span className="text-white text-xs">❤️</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-gray-600">Pain</p>
+                                                <p className="text-xl font-bold text-gray-900">30</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                        {/* Mini sparkline chart */}
+                                        <svg width="100%" height="40" className="relative z-10">
+                                            <defs>
+                                                <linearGradient id="painGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                    <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 0.3 }} />
+                                                    <stop offset="100%" style={{ stopColor: '#ef4444', stopOpacity: 0.05 }} />
+                                                </linearGradient>
+                                            </defs>
+                                            <path d="M 0,30 Q 15,20 30,25 T 60,15 T 90,20 T 120,10" stroke="#ef4444" strokeWidth="2" fill="none" />
+                                            <path d="M 0,30 Q 15,20 30,25 T 60,15 T 90,20 T 120,10 L 120,40 L 0,40 Z" fill="url(#painGradient)" />
+                                        </svg>
+                                    </div>
+
+                                    {/* Fatigue */}
+                                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 relative overflow-hidden">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                <span className="text-white text-xs">😴</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-gray-600">Fatigue</p>
+                                                <p className="text-xl font-bold text-gray-900">15</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                        {/* Mini sparkline chart */}
+                                        <svg width="100%" height="40" className="relative z-10">
+                                            <defs>
+                                                <linearGradient id="fatigueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                    <stop offset="0%" style={{ stopColor: '#8b5cf6', stopOpacity: 0.3 }} />
+                                                    <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 0.05 }} />
+                                                </linearGradient>
+                                            </defs>
+                                            <path d="M 0,25 Q 15,15 30,20 T 60,10 T 90,15 T 120,8" stroke="#8b5cf6" strokeWidth="2" fill="none" />
+                                            <path d="M 0,25 Q 15,15 30,20 T 60,10 T 90,15 T 120,8 L 120,40 L 0,40 Z" fill="url(#fatigueGradient)" />
+                                        </svg>
+                                    </div>
+
+                                    {/* Stress */}
+                                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 relative overflow-hidden">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                <span className="text-white text-xs">😰</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-gray-600">Stress</p>
+                                                <p className="text-xl font-bold text-gray-900">45</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                        {/* Mini sparkline chart */}
+                                        <svg width="100%" height="40" className="relative z-10">
+                                            <defs>
+                                                <linearGradient id="stressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                    <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 0.3 }} />
+                                                    <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.05 }} />
+                                                </linearGradient>
+                                            </defs>
+                                            <path d="M 0,20 Q 15,25 30,18 T 60,22 T 90,18 T 120,25" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                                            <path d="M 0,20 Q 15,25 30,18 T 60,22 T 90,18 T 120,25 L 120,40 L 0,40 Z" fill="url(#stressGradient)" />
+                                        </svg>
+                                    </div>
+
+                                    {/* Borg Scale */}
+                                    <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg p-4 relative overflow-hidden">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                                <span className="text-white text-xs">💪</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-gray-600">Borg Scale</p>
+                                                <p className="text-xl font-bold text-gray-900">30</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mb-2">of 100</p>
+                                        {/* Mini sparkline chart */}
+                                        <svg width="100%" height="40" className="relative z-10">
+                                            <defs>
+                                                <linearGradient id="borgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                    <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 0.3 }} />
+                                                    <stop offset="100%" style={{ stopColor: '#ec4899', stopOpacity: 0.05 }} />
+                                                </linearGradient>
+                                            </defs>
+                                            <path d="M 0,28 Q 15,22 30,26 T 60,18 T 90,24 T 120,15" stroke="#ec4899" strokeWidth="2" fill="none" />
+                                            <path d="M 0,28 Q 15,22 30,26 T 60,18 T 90,24 T 120,15 L 120,40 L 0,40 Z" fill="url(#borgGradient)" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <p className="text-xs text-gray-500 mt-3 text-center">This should open the linked device page</p>
+                            </div>
+
+                            {/* Linked Device */}
+                            <div className="lg:col-span-1">
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h3 className="text-sm font-semibold text-gray-900">Linked Device</h3>
+                                        <button className="text-lg">⋮</button>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
+                                            <span className="text-2xl">⌚</span>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-900">Smart Watch</p>
+                                            <p className="text-xs text-gray-600">Amazfit Kratos</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    )}
+                    </div>
 
-                    {/* Phenotype Tab */}
-                    {activeTab === 'phenotype' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-6">
-                                <p className="text-sm text-red-700 mb-2">Pain Sensitivity</p>
-                                <p className="text-3xl font-bold text-red-900">{user.phenotype.painSensitivity}</p>
+                    {/* Mental Exercise Section */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6">Mental Exercise</h2>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Left Column - Your Activity */}
+                            <div className="lg:col-span-1">
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-sm font-semibold text-gray-900">Your Activity</h3>
+                                        <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-600">
+                                            <option>Today</option>
+                                            <option>This Week</option>
+                                            <option>This Month</option>
+                                        </select>
+                                    </div>
+                                    {/* Bar Chart */}
+                                    <div className="flex items-end justify-between gap-2" style={{ height: '240px' }}>
+                                        {[
+                                            { day: 'Mon', value: 35 },
+                                            { day: 'Tue', value: 60 },
+                                            { day: 'Wed', value: 80 },
+                                            { day: 'Thu', value: 70 },
+                                            { day: 'Fri', value: 85 },
+                                            { day: 'Sat', value: 65 },
+                                            { day: 'Sun', value: 45 },
+                                        ].map((item, idx) => (
+                                            <div key={idx} className="flex-1 flex flex-col justify-end items-center gap-1">
+                                                <div className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t shadow-sm" style={{ height: `${Math.round(item.value * 2.4)}px` }}></div>
+                                                <span className="text-xs text-gray-600 font-medium">{item.day}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6">
-                                <p className="text-sm text-orange-700 mb-2">Stress Response</p>
-                                <p className="text-3xl font-bold text-orange-900">{user.phenotype.stressResponse}</p>
+
+                            {/* Middle Column - Exercise Table */}
+                            <div className="lg:col-span-1">
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <div className="overflow-x-auto max-h-64 overflow-y-auto">
+                                        <table className="w-full text-xs">
+                                            <thead className="sticky top-0 bg-gray-50 z-10">
+                                                <tr className="border-b border-gray-300">
+                                                    <th className="text-left py-2 px-2 font-semibold text-gray-900">Type of exercise</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Minutes</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Result</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Date</th>
+                                                    <th className="text-center py-2 px-2 font-semibold text-gray-900">Completed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {[
+                                                    { type: 'One po one Maths tuition', minutes: '30', result: 'Better Brain', date: '26/01/2025', completed: 'Yes' },
+                                                    { type: 'One po one Maths tuition', minutes: '25', result: 'Barnch Cunition', date: '25/01/2025', completed: 'Yes' },
+                                                    { type: 'One po one Maths tuition', minutes: '40', result: 'Howard Heaverad', date: '24/01/2025', completed: 'Yes' },
+                                                    { type: 'One po one Maths tuition', minutes: '20', result: 'Maths Equation', date: '23/01/2025', completed: 'No' },
+                                                    { type: 'One po one Maths tuition', minutes: '15', result: 'Vertreibt Wunderbrügge', date: '22/01/2025', completed: 'No' },
+                                                    { type: 'One po one Maths tuition', minutes: '35', result: 'Practice Register', date: '21/01/2025', completed: 'No' },
+                                                ].map((exercise, idx) => (
+                                                    <tr key={idx} className="border-b border-gray-200">
+                                                        <td className="py-2 px-2 text-gray-700">{exercise.type}</td>
+                                                        <td className="py-2 px-2 text-center text-gray-700">{exercise.minutes}</td>
+                                                        <td className="py-2 px-2 text-center text-gray-700">{exercise.result}</td>
+                                                        <td className="py-2 px-2 text-center text-gray-700">{exercise.date}</td>
+                                                        <td className="py-2 px-2 text-center">
+                                                            <span className={`px-2 py-0.5 rounded text-xs ${exercise.completed === 'Yes' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                                {exercise.completed}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6">
-                                <p className="text-sm text-purple-700 mb-2">Sleep Quality</p>
-                                <p className="text-3xl font-bold text-purple-900">{user.phenotype.sleepQuality}</p>
-                            </div>
-                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6">
-                                <p className="text-sm text-blue-700 mb-2">Physical Activity</p>
-                                <p className="text-3xl font-bold text-blue-900">{user.phenotype.physicalActivity}</p>
-                            </div>
-                            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6">
-                                <p className="text-sm text-green-700 mb-2">Diet Quality</p>
-                                <p className="text-3xl font-bold text-green-900">{user.phenotype.dietQuality}</p>
-                            </div>
-                            <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg p-6">
-                                <p className="text-sm text-indigo-700 mb-2">Cognitive Function</p>
-                                <p className="text-3xl font-bold text-indigo-900">{user.phenotype.cognitiveFunction}</p>
+
+                            {/* Right Column - Cognitive Domains */}
+                            <div className="lg:col-span-1">
+                                <div className="bg-gray-50 rounded-lg p-4 max-h-68 ">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-sm font-semibold text-gray-900">Cognitive domains</h3>
+                                        <span className="px-2 py-1 bg-gray-900 text-white text-xs font-semibold rounded">TODAY</span>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        {/* Inhibitory control */}
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-xs text-gray-700">Inhibitory control</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs text-gray-500">30%</span>
+                                                    <span className="text-xs text-gray-500">70%</span>
+                                                </div>
+                                            </div>
+                                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '70%' }}></div>
+                                            </div>
+                                        </div>
+
+                                        {/* Selective attention */}
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-xs text-gray-700">Selective attention</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs text-gray-500">45%</span>
+                                                    <span className="text-xs text-gray-500">55%</span>
+                                                </div>
+                                            </div>
+                                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '55%' }}></div>
+                                            </div>
+                                        </div>
+
+                                        {/* Working memory */}
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-xs text-gray-700">Working memory</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs text-gray-500">25%</span>
+                                                    <span className="text-xs text-gray-500">75%</span>
+                                                </div>
+                                            </div>
+                                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '75%' }}></div>
+                                            </div>
+                                        </div>
+
+                                        {/* Cognitive flexibility */}
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-xs text-gray-700">Cognitive flexibility</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs text-gray-500">50%</span>
+                                                    <span className="text-xs text-gray-500">44%</span>
+                                                </div>
+                                            </div>
+                                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '44%' }}></div>
+                                            </div>
+                                        </div>
+
+                                        {/* Sustained attention */}
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-xs text-gray-700">Sustained attention</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs text-gray-500">34%</span>
+                                                    <span className="text-xs text-gray-500">60%</span>
+                                                </div>
+                                            </div>
+                                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '60%' }}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    )}
+                    </div>
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6">Biological</h2>
 
-                    {/* Progress Tab */}
-                    {activeTab === 'progress' && (
-                        <div className="space-y-6">
-                            {/* Activity Section */}
-                            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h3 className="text-lg font-semibold text-white">Activity</h3>
-                                    <span className="text-xs text-gray-400 flex items-center gap-1">
-                                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                        Real Time
-                                    </span>
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Pain Diary Table */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Pain Diary</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
                                 </div>
-                                <div className="flex items-center gap-8">
-                                    {/* Concentric Rings */}
-                                    <div className="relative w-48 h-48 flex-shrink-0">
-                                        {/* Outer Ring - Education (Red) */}
-                                        <div className="absolute inset-0">
-                                            <Doughnut
-                                                data={{
-                                                    labels: ['Completed', 'Remaining'],
-                                                    datasets: [{
-                                                        data: [60, 40],
-                                                        backgroundColor: ['rgb(239, 68, 68)', 'rgba(239, 68, 68, 0.15)'],
-                                                        borderWidth: 0,
-                                                        rotation: -90,
-                                                    }],
-                                                }}
-                                                options={activityChartOptions}
-                                            />
-                                        </div>
-                                        {/* Middle Ring - Exercise (Green) */}
-                                        <div className="absolute inset-4">
-                                            <Doughnut
-                                                data={{
-                                                    labels: ['Completed', 'Remaining'],
-                                                    datasets: [{
-                                                        data: [6, 94],
-                                                        backgroundColor: ['rgb(34, 197, 94)', 'rgba(34, 197, 94, 0.15)'],
-                                                        borderWidth: 0,
-                                                        rotation: -90,
-                                                    }],
-                                                }}
-                                                options={activityChartOptions}
-                                            />
-                                        </div>
-                                        {/* Inner Ring - Mental (Cyan/Blue) */}
-                                        <div className="absolute inset-8">
-                                            <Doughnut
-                                                data={{
-                                                    labels: ['Completed', 'Remaining'],
-                                                    datasets: [{
-                                                        data: [10, 90],
-                                                        backgroundColor: ['rgb(6, 182, 212)', 'rgba(6, 182, 212, 0.15)'],
-                                                        borderWidth: 0,
-                                                        rotation: -90,
-                                                    }],
-                                                }}
-                                                options={activityChartOptions}
-                                            />
-                                        </div>
+                                <table className="w-full text-xs">
+                                    <thead>
+                                        <tr className="border-b border-gray-300">
+                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">Intensity</th>
+                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">When</th>
+                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {[
+                                            { part: 'part of the body (i.e.: shoulder pain)', intensity: '3/10', when: 'Day & exact Time', notes: '"I took this med."', color: 'bg-green-100 text-green-700' },
+                                            { part: 'part of the body (i.e.: shoulder pain)', intensity: '3/10', when: 'Day & exact Time', notes: 'No', color: 'bg-green-100 text-green-700' },
+                                            { part: 'part of the body (i.e.: shoulder pain)', intensity: '6/10', when: 'Day & exact Time', notes: 'Yes', color: 'bg-yellow-100 text-yellow-700' },
+                                            { part: 'part of the body (i.e.: shoulder pain)', intensity: '8/10', when: '26/01/2025', notes: 'No', color: 'bg-red-100 text-red-700' },
+                                            { part: 'part of the body (i.e.: shoulder pain)', intensity: '-', when: '25/01/2025', notes: 'No', color: 'bg-gray-100 text-gray-700' },
+                                            { part: 'part of the body (i.e.: shoulder pain)', intensity: '-', when: '24/01/2025', notes: 'No', color: 'bg-gray-100 text-gray-700' },
+                                        ].map((item, idx) => (
+                                            <tr key={idx} className="border-b border-gray-200">
+                                                <td className="py-2 px-2">
+                                                    <span className={`px-2 py-0.5 rounded text-xs font-semibold ${item.color}`}>
+                                                        {item.intensity}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2 px-2 text-center text-gray-700">{item.when}</td>
+                                                <td className="py-2 px-2 text-center text-gray-700">{item.notes}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Symptoms Table */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Symptoms</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
+                                </div>
+                                <table className="w-full text-xs">
+                                    <thead>
+                                        <tr className="border-b border-gray-300">
+                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">When</th>
+                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">How many times</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {[
+                                            { symptom: 'i.e headache', when: 'Day & exact Time', times: '1' },
+                                            { symptom: 'anxiety', when: 'Day & exact Time', times: '32' },
+                                            { symptom: 'fibra fog', when: '', times: '' },
+                                            { symptom: 'One to one Maths tuition', when: '26/01/2025', times: '' },
+                                            { symptom: 'One to one Maths tuition', when: '25/01/2025', times: '' },
+                                            { symptom: 'One to one Maths tuition', when: '24/01/2025', times: '' },
+                                        ].map((item, idx) => (
+                                            <tr key={idx} className="border-b border-gray-200">
+                                                <td className="py-2 px-2 text-gray-700">{item.when}</td>
+                                                <td className="py-2 px-2 text-center text-gray-700">{item.times}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Bar Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Select questionnaire</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
+                                </div>
+                                <div className="h-48 bg-white rounded p-2">
+                                    <div className="flex items-end justify-between gap-1" style={{ height: '160px' }}>
+                                        {[
+                                            { month: 'Apr', value: 60 },
+                                            { month: 'May', value: 70 },
+                                            { month: 'Jun', value: 75 },
+                                            { month: 'Jul', value: 90 },
+                                            { month: 'Aug', value: 65 },
+                                            { month: 'Sep', value: 80 },
+                                            { month: 'Oct', value: 70 },
+                                            { month: 'Nov', value: 85 },
+                                        ].map((item, idx) => (
+                                            <div key={idx} className="flex-1 flex flex-col justify-end items-center">
+                                                <div
+                                                    className={`w-full ${idx === 3 ? 'bg-gray-800' : 'bg-gradient-to-t from-purple-500 to-purple-400'} rounded-t`}
+                                                    style={{ height: `${Math.round(item.value * 1.6)}px` }}
+                                                ></div>
+                                            </div>
+                                        ))}
                                     </div>
+                                    <div className="flex items-center justify-between gap-1 mt-2">
+                                        {['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'].map((month, idx) => (
+                                            <span key={idx} className="text-xs text-gray-600 font-medium flex-1 text-center">{month}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="mt-4 space-y-2">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-gray-600">Select questionnaire</span>
+                                        <span className="text-gray-600">Select questionnaire</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    {/* Labels */}
-                                    <div className="flex flex-col gap-4">
-                                        {/* Education */}
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
-                                                <span className="text-red-500 text-lg">→</span>
-                                            </div>
-                                            <div>
-                                                <p className="text-red-400 font-semibold">Education 60%</p>
-                                                <p className="text-white text-lg font-bold">⅔ lessons</p>
-                                            </div>
-                                        </div>
+                    {/* Psychological Section */}
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6">Psychological</h2>
 
-                                        {/* Exercise */}
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                                                <span className="text-green-500 text-lg">→</span>
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Left - Bar Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Select questionnaire</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
+                                </div>
+                                <div className="h-48 bg-white rounded p-2">
+                                    <div className="flex items-end justify-between gap-1" style={{ height: '160px' }}>
+                                        {[
+                                            { month: 'Apr', value: 55 },
+                                            { month: 'May', value: 65 },
+                                            { month: 'Jun', value: 75 },
+                                            { month: 'Jul', value: 88 },
+                                            { month: 'Aug', value: 70 },
+                                            { month: 'Sep', value: 60 },
+                                            { month: 'Oct', value: 68 },
+                                            { month: 'Nov', value: 78 },
+                                        ].map((item, idx) => (
+                                            <div key={idx} className="flex-1 flex flex-col justify-end items-center">
+                                                <div
+                                                    className={`w-full ${idx === 3 ? 'bg-gray-800' : 'bg-gradient-to-t from-purple-500 to-purple-400'} rounded-t`}
+                                                    style={{ height: `${Math.round(item.value * 1.6)}px` }}
+                                                ></div>
                                             </div>
-                                            <div>
-                                                <p className="text-green-400 font-semibold">EXERCISE 6%</p>
-                                                <p className="text-white text-lg font-bold">2/30 MIN</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Mental Training */}
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center">
-                                                <span className="text-cyan-500 text-lg">↑</span>
-                                            </div>
-                                            <div>
-                                                <p className="text-cyan-400 font-semibold">Mental training 10%</p>
-                                                <p className="text-white text-lg font-bold">1/3 activities</p>
-                                            </div>
-                                        </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex items-center justify-between gap-1 mt-2">
+                                        {['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'].map((month, idx) => (
+                                            <span key={idx} className="text-xs text-gray-600 font-medium flex-1 text-center">{month}</span>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Education Sessions Carousel */}
-                            <div className="bg-white rounded-lg border border-gray-200 p-6">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-4">Education</h3>
-                                <div className="relative">
-                                    {/* Left Arrow */}
-                                    <button
-                                        onClick={handlePrevSession}
-                                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200"
-                                    >
-                                        <span className="text-gray-600 text-xl">←</span>
-                                    </button>
-
-                                    {/* Session Cards - Show 3 at a time */}
-                                    <div className="px-8 overflow-hidden">
-                                        <div className="flex gap-4 transition-transform duration-300" style={{ transform: `translateX(-${currentSessionIndex * (100 / 3)}%)` }}>
-                                            {/* Render sessions with infinite loop logic */}
-                                            {[...educationSessions, ...educationSessions, ...educationSessions].map((session, idx) => {
-                                                const colorClasses = getColorClasses(session.color);
-                                                return (
-                                                    <div key={`session-${idx}`} className="w-1/3 flex-shrink-0 px-2">
-                                                        <div className={`bg-gradient-to-br ${colorClasses.bg} rounded-xl p-4 border ${colorClasses.border}`}>
-                                                            <div className="flex items-start gap-3 mb-4">
-                                                                <div className={`w-10 h-10 ${colorClasses.icon} rounded-lg flex items-center justify-center`}>
-                                                                    <span className="text-lg">{session.icon}</span>
-                                                                </div>
-                                                                <div className="flex-1">
-                                                                    <span className={`inline-block px-2 py-0.5 ${colorClasses.badge} text-white text-xs rounded-full mb-1`}>
-                                                                        Session {session.id}
-                                                                    </span>
-                                                                    <p className="text-gray-700 font-medium">29 min.</p>
-                                                                </div>
-                                                                <div className="text-right">
-                                                                    {session.percentage ? (
-                                                                        <>
-                                                                            <p className={`text-xs font-medium ${session.percentage.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
-                                                                                {session.percentage}
-                                                                            </p>
-                                                                            <p className="text-xs text-gray-500">{session.dateInfo.label}</p>
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <p className="text-xs text-gray-400">{session.dateInfo.label}</p>
-                                                                            <p className="text-xs text-gray-500">{session.dateInfo.value}</p>
-                                                                        </>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                            <div className="flex items-center justify-between">
-                                                                <span className="text-sm text-gray-600">Correct answers:</span>
-                                                                <span className="text-sm font-bold text-gray-900">{session.correctAnswers}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    {/* Right Arrow */}
-                                    <button
-                                        onClick={handleNextSession}
-                                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200"
-                                    >
-                                        <span className="text-gray-600 text-xl">→</span>
-                                    </button>
+                            {/* Middle - Line Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Select questionnaires</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
+                                </div>
+                                <div className="h-48 bg-white rounded p-4 relative">
+                                    <svg width="100%" height="100%" viewBox="0 0 300 150">
+                                        {/* Grid lines */}
+                                        <line x1="0" y1="140" x2="300" y2="140" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="0" y1="105" x2="300" y2="105" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="0" y1="70" x2="300" y2="70" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="0" y1="35" x2="300" y2="35" stroke="#e5e7eb" strokeWidth="1" />
+                                        {/* Blue line (upper) */}
+                                        <path d="M 20,100 L 60,80 L 100,70 L 140,50 L 180,45 L 220,40 L 260,35" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                                        {/* Purple line (lower) */}
+                                        <path d="M 20,120 L 60,115 L 100,110 L 140,105 L 180,100 L 220,98 L 260,95" stroke="#8b5cf6" strokeWidth="2" fill="none" />
+                                        {/* Shaded area */}
+                                        <path d="M 20,120 L 60,115 L 100,110 L 140,105 L 180,100 L 220,98 L 260,95 L 260,140 L 20,140 Z" fill="#e0e7ff" opacity="0.3" />
+                                    </svg>
                                 </div>
                             </div>
 
-                            {/* Key Areas of Concern */}
-                            <div className="bg-white rounded-lg border border-gray-200 p-6">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-6">Key Areas of Concern</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {/* Education */}
-                                    <div>
-                                        <div className="flex items-baseline justify-between mb-2">
-                                            <span className="text-sm text-gray-600">{educationConcernData.label}</span>
-                                            <button className="text-xs text-blue-600">Detail</button>
-                                        </div>
-                                        <div className="mb-3">
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-3xl font-bold text-blue-600">{educationConcernData.value}</span>
-                                                <span className="text-sm text-gray-500">{educationConcernData.unit}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <span className="text-xs text-gray-500">Your Best Goal</span>
-                                                <span className="text-xs text-gray-900 font-medium">{educationConcernData.goal}{educationConcernData.unit}daily</span>
-                                            </div>
-                                        </div>
-                                        <div className="space-y-1">
-                                            {[1, 2, 3, 4, 5, 6, 7].map((_, idx) => (
-                                                <div key={idx} className="flex items-center gap-1">
-                                                    <div className="flex-1 bg-gray-100 rounded-sm overflow-hidden h-1">
-                                                        <div
-                                                            className="h-full bg-blue-500 rounded-sm"
-                                                            style={{ width: `${Math.random() * 100}%` }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
+                            {/* Right - Summary Card */}
+                            <div className="bg-gray-50 rounded-lg p-4 flex flex-col justify-center">
+                                <div className="bg-white rounded-lg p-6 text-center">
+                                    <p className="text-sm text-gray-600 mb-2">Completed <span className="font-semibold">questionnaires</span></p>
+                                    <div className="flex items-baseline justify-center gap-2 mb-2">
+                                        <span className="text-4xl font-bold text-gray-900">10</span>
+                                        <span className="text-2xl text-gray-500">/20</span>
                                     </div>
+                                    <p className="text-xs text-gray-500">📈 +4.50% from last week</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    {/* Physical */}
-                                    <div>
-                                        <div className="flex items-baseline justify-between mb-2">
-                                            <span className="text-sm text-gray-600">{physicalConcernData.label}</span>
-                                            <button className="text-xs text-blue-600">Detail</button>
-                                        </div>
-                                        <div className="mb-3">
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-3xl font-bold text-blue-600">{physicalConcernData.value}</span>
-                                                <span className="text-sm text-gray-500">{physicalConcernData.unit}</span>
+                    {/* Social Section */}
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6">Social</h2>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Left - Bar Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Select questionnaire</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
+                                </div>
+                                <div className="h-48 bg-white rounded p-2">
+                                    <div className="flex items-end justify-between gap-1" style={{ height: '160px' }}>
+                                        {[
+                                            { month: 'Apr', value: 50 },
+                                            { month: 'May', value: 70 },
+                                            { month: 'Jun', value: 80 },
+                                            { month: 'Jul', value: 85 },
+                                            { month: 'Aug', value: 65 },
+                                            { month: 'Sep', value: 75 },
+                                            { month: 'Oct', value: 70 },
+                                            { month: 'Nov', value: 82 },
+                                        ].map((item, idx) => (
+                                            <div key={idx} className="flex-1 flex flex-col justify-end items-center">
+                                                <div
+                                                    className={`w-full ${idx === 3 ? 'bg-gray-800' : 'bg-gradient-to-t from-purple-500 to-purple-400'} rounded-t`}
+                                                    style={{ height: `${Math.round(item.value * 1.6)}px` }}
+                                                ></div>
                                             </div>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <span className="text-xs text-gray-500">Your Best Goal</span>
-                                                <span className="text-xs text-gray-900 font-medium">{physicalConcernData.goal}{physicalConcernData.unit}daily</span>
-                                            </div>
-                                        </div>
-                                        <div className="space-y-1">
-                                            {[1, 2, 3, 4, 5, 6, 7].map((_, idx) => (
-                                                <div key={idx} className="flex items-center gap-1">
-                                                    <div className="flex-1 bg-gray-100 rounded-sm overflow-hidden h-1">
-                                                        <div
-                                                            className="h-full bg-blue-500 rounded-sm"
-                                                            style={{ width: `${Math.random() * 100}%` }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
+                                        ))}
                                     </div>
-
-                                    {/* Mental */}
-                                    <div>
-                                        <div className="flex items-baseline justify-between mb-2">
-                                            <span className="text-sm text-gray-600">{mentalConcernData.label}</span>
-                                            <button className="text-xs text-blue-600">Detail</button>
-                                        </div>
-                                        <div className="mb-3">
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-3xl font-bold text-blue-600">{mentalConcernData.value}</span>
-                                                <span className="text-sm text-gray-500">{mentalConcernData.unit}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <span className="text-xs text-gray-500">Your Best Goal</span>
-                                                <span className="text-xs text-gray-900 font-medium">{mentalConcernData.goal}{mentalConcernData.unit}</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex items-center gap-1">
-                                                <span className="text-sm text-gray-600">more than</span>
-                                            </div>
-                                            <div className="flex items-center gap-1">
-                                                <div className="w-8 h-8 bg-blue-100 rounded"></div>
-                                                <div className="w-12 h-8 bg-blue-600 rounded"></div>
-                                            </div>
-                                        </div>
+                                    <div className="flex items-center justify-between gap-1 mt-2">
+                                        {['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'].map((month, idx) => (
+                                            <span key={idx} className="text-xs text-gray-600 font-medium flex-1 text-center">{month}</span>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Physical Exercise Section */}
-                            <div className="bg-white rounded-lg border border-gray-200 p-6">
-                                <h2 className="text-xl font-bold text-gray-900 mb-6">Physical Exercise</h2>
-
-                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                    {/* Left Column - Your Activity */}
-                                    <div className="lg:col-span-1 ">
-                                        <div className="bg-gray-50 rounded-lg p-4">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h3 className="text-sm font-semibold text-gray-900">Your Activity</h3>
-                                                <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-600">
-                                                    <option>Today</option>
-                                                    <option>This Week</option>
-                                                    <option>This Month</option>
-                                                </select>
-                                            </div>
-                                            {/* Bar Chart */}
-                                            <div className="flex items-end justify-between gap-2" style={{ height: '240px' }}>
-                                                {[
-                                                    { day: 'Mon', value: 40 },
-                                                    { day: 'Tue', value: 70 },
-                                                    { day: 'Wed', value: 55 },
-                                                    { day: 'Thu', value: 80 },
-                                                    { day: 'Fri', value: 85 },
-                                                    { day: 'Sat', value: 90 },
-                                                    { day: 'Sun', value: 50 },
-                                                ].map((item, idx) => (
-                                                    <div key={idx} className="flex-1 flex flex-col justify-end items-center gap-1">
-                                                        <div className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t shadow-sm" style={{ height: `${Math.round(item.value * 2.4)}px` }}></div>
-                                                        <span className="text-xs text-gray-600 font-medium">{item.day}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    {/* Middle Column - Exercise Table */}
-                                    <div className="lg:col-span-2">
-                                        <div className="bg-gray-50 rounded-lg p-4">
-                                            <div className="overflow-x-auto max-h-68 overflow-y-auto">
-                                                <table className="w-full text-xs">
-                                                    <thead className="sticky top-0 bg-gray-50 z-10">
-                                                        <tr className="border-b border-gray-300">
-                                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">Type of exercise</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Sets</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Reps</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Weight</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Date</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Completed</th>
-                                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">Note</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {[
-                                                            { type: 'One po one Maths tutition', sets: '2', reps: '12', weight: '2kg', date: '26/01/2021', completed: 'Yes', note: null },
-                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: '-', date: '24/01/2021', completed: 'Yes', note: 'Session Postponed' },
-                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Maths Equation', date: '23/01/2021', completed: 'No', note: null },
-                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Vertreibt Wunderbrügge', date: '22/01/2021', completed: 'No', note: null },
-                                                            { type: 'One po one Maths tutition', sets: '-', reps: '-', weight: 'Vertreibt Wunderbrügge', date: '22/01/2021', completed: 'No', note: null },
-                                                        ].map((exercise, idx) => (
-                                                            <tr key={idx} className="border-b border-gray-200">
-                                                                <td className="py-2 px-2 text-gray-700">{exercise.type}</td>
-                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.sets}</td>
-                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.reps}</td>
-                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.weight}</td>
-                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.date}</td>
-                                                                <td className="py-2 px-2 text-center">
-                                                                    <span className={`px-2 py-0.5 rounded text-xs ${exercise.completed === 'Yes' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                                                        {exercise.completed}
-                                                                    </span>
-                                                                </td>
-                                                                <td className="py-2 px-2 text-gray-700">{exercise.note || '-'}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                            {/* Middle - Line Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Select questionnaires</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
                                 </div>
-
-                                {/* Health Metrics and Linked Device */}
-                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-                                    {/* Health Metrics Cards */}
-                                    <div className="lg:col-span-2">
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                            {/* Pain */}
-                                            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 relative overflow-hidden">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                                                        <span className="text-white text-xs">❤️</span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs text-gray-600">Pain</p>
-                                                        <p className="text-xl font-bold text-gray-900">30</p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
-                                                {/* Mini sparkline chart */}
-                                                <svg width="100%" height="40" className="relative z-10">
-                                                    <defs>
-                                                        <linearGradient id="painGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                            <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 0.3 }} />
-                                                            <stop offset="100%" style={{ stopColor: '#ef4444', stopOpacity: 0.05 }} />
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path d="M 0,30 Q 15,20 30,25 T 60,15 T 90,20 T 120,10" stroke="#ef4444" strokeWidth="2" fill="none" />
-                                                    <path d="M 0,30 Q 15,20 30,25 T 60,15 T 90,20 T 120,10 L 120,40 L 0,40 Z" fill="url(#painGradient)" />
-                                                </svg>
-                                            </div>
-
-                                            {/* Fatigue */}
-                                            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 relative overflow-hidden">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                                                        <span className="text-white text-xs">😴</span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs text-gray-600">Fatigue</p>
-                                                        <p className="text-xl font-bold text-gray-900">15</p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
-                                                {/* Mini sparkline chart */}
-                                                <svg width="100%" height="40" className="relative z-10">
-                                                    <defs>
-                                                        <linearGradient id="fatigueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                            <stop offset="0%" style={{ stopColor: '#8b5cf6', stopOpacity: 0.3 }} />
-                                                            <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 0.05 }} />
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path d="M 0,25 Q 15,15 30,20 T 60,10 T 90,15 T 120,8" stroke="#8b5cf6" strokeWidth="2" fill="none" />
-                                                    <path d="M 0,25 Q 15,15 30,20 T 60,10 T 90,15 T 120,8 L 120,40 L 0,40 Z" fill="url(#fatigueGradient)" />
-                                                </svg>
-                                            </div>
-
-                                            {/* Stress */}
-                                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 relative overflow-hidden">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                                                        <span className="text-white text-xs">😰</span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs text-gray-600">Stress</p>
-                                                        <p className="text-xl font-bold text-gray-900">45</p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
-                                                {/* Mini sparkline chart */}
-                                                <svg width="100%" height="40" className="relative z-10">
-                                                    <defs>
-                                                        <linearGradient id="stressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                            <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 0.3 }} />
-                                                            <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.05 }} />
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path d="M 0,20 Q 15,25 30,18 T 60,22 T 90,18 T 120,25" stroke="#3b82f6" strokeWidth="2" fill="none" />
-                                                    <path d="M 0,20 Q 15,25 30,18 T 60,22 T 90,18 T 120,25 L 120,40 L 0,40 Z" fill="url(#stressGradient)" />
-                                                </svg>
-                                            </div>
-
-                                            {/* Borg Scale */}
-                                            <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg p-4 relative overflow-hidden">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                                                        <span className="text-white text-xs">💪</span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs text-gray-600">Borg Scale</p>
-                                                        <p className="text-xl font-bold text-gray-900">30</p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-xs text-gray-500 mb-2">of 100</p>
-                                                {/* Mini sparkline chart */}
-                                                <svg width="100%" height="40" className="relative z-10">
-                                                    <defs>
-                                                        <linearGradient id="borgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                            <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 0.3 }} />
-                                                            <stop offset="100%" style={{ stopColor: '#ec4899', stopOpacity: 0.05 }} />
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path d="M 0,28 Q 15,22 30,26 T 60,18 T 90,24 T 120,15" stroke="#ec4899" strokeWidth="2" fill="none" />
-                                                    <path d="M 0,28 Q 15,22 30,26 T 60,18 T 90,24 T 120,15 L 120,40 L 0,40 Z" fill="url(#borgGradient)" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <p className="text-xs text-gray-500 mt-3 text-center">This should open the linked device page</p>
-                                    </div>
-
-                                    {/* Linked Device */}
-                                    <div className="lg:col-span-1">
-                                        <div className="bg-gray-50 rounded-lg p-4">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <h3 className="text-sm font-semibold text-gray-900">Linked Device</h3>
-                                                <button className="text-lg">⋮</button>
-                                            </div>
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-12 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
-                                                    <span className="text-2xl">⌚</span>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm font-semibold text-gray-900">Smart Watch</p>
-                                                    <p className="text-xs text-gray-600">Amazfit Kratos</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div className="h-48 bg-white rounded p-4 relative">
+                                    <svg width="100%" height="100%" viewBox="0 0 300 150">
+                                        {/* Grid lines */}
+                                        <line x1="0" y1="140" x2="300" y2="140" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="0" y1="105" x2="300" y2="105" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="0" y1="70" x2="300" y2="70" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="0" y1="35" x2="300" y2="35" stroke="#e5e7eb" strokeWidth="1" />
+                                        {/* Blue line (upper) */}
+                                        <path d="M 20,110 L 60,95 L 100,85 L 140,75 L 180,65 L 220,58 L 260,52" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                                        {/* Purple line (lower) */}
+                                        <path d="M 20,125 L 60,122 L 100,118 L 140,115 L 180,110 L 220,108 L 260,105" stroke="#8b5cf6" strokeWidth="2" fill="none" />
+                                        {/* Shaded area */}
+                                        <path d="M 20,125 L 60,122 L 100,118 L 140,115 L 180,110 L 220,108 L 260,105 L 260,140 L 20,140 Z" fill="#e0e7ff" opacity="0.3" />
+                                    </svg>
                                 </div>
                             </div>
 
-                            {/* Mental Exercise Section */}
-                            <div className="bg-white rounded-lg border border-gray-200 p-6">
-                                <h2 className="text-xl font-bold text-gray-900 mb-6">Mental Exercise</h2>
-
-                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                    {/* Left Column - Your Activity */}
-                                    <div className="lg:col-span-1">
-                                        <div className="bg-gray-50 rounded-lg p-4">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h3 className="text-sm font-semibold text-gray-900">Your Activity</h3>
-                                                <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-600">
-                                                    <option>Today</option>
-                                                    <option>This Week</option>
-                                                    <option>This Month</option>
-                                                </select>
-                                            </div>
-                                            {/* Bar Chart */}
-                                            <div className="flex items-end justify-between gap-2" style={{ height: '240px' }}>
-                                                {[
-                                                    { day: 'Mon', value: 35 },
-                                                    { day: 'Tue', value: 60 },
-                                                    { day: 'Wed', value: 80 },
-                                                    { day: 'Thu', value: 70 },
-                                                    { day: 'Fri', value: 85 },
-                                                    { day: 'Sat', value: 65 },
-                                                    { day: 'Sun', value: 45 },
-                                                ].map((item, idx) => (
-                                                    <div key={idx} className="flex-1 flex flex-col justify-end items-center gap-1">
-                                                        <div className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t shadow-sm" style={{ height: `${Math.round(item.value * 2.4)}px` }}></div>
-                                                        <span className="text-xs text-gray-600 font-medium">{item.day}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
+                            {/* Right - Summary Card */}
+                            <div className="bg-gray-50 rounded-lg p-4 flex flex-col justify-center">
+                                <div className="bg-white rounded-lg p-6 text-center">
+                                    <p className="text-sm text-gray-600 mb-2">Completed <span className="font-semibold">questionnaires</span></p>
+                                    <div className="flex items-baseline justify-center gap-2 mb-2">
+                                        <span className="text-4xl font-bold text-gray-900">10</span>
+                                        <span className="text-2xl text-gray-500">/20</span>
                                     </div>
-
-                                    {/* Middle Column - Exercise Table */}
-                                    <div className="lg:col-span-1">
-                                        <div className="bg-gray-50 rounded-lg p-4">
-                                            <div className="overflow-x-auto max-h-64 overflow-y-auto">
-                                                <table className="w-full text-xs">
-                                                    <thead className="sticky top-0 bg-gray-50 z-10">
-                                                        <tr className="border-b border-gray-300">
-                                                            <th className="text-left py-2 px-2 font-semibold text-gray-900">Type of exercise</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Minutes</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Result</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Date</th>
-                                                            <th className="text-center py-2 px-2 font-semibold text-gray-900">Completed</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {[
-                                                            { type: 'One po one Maths tuition', minutes: '30', result: 'Better Brain', date: '26/01/2025', completed: 'Yes' },
-                                                            { type: 'One po one Maths tuition', minutes: '25', result: 'Barnch Cunition', date: '25/01/2025', completed: 'Yes' },
-                                                            { type: 'One po one Maths tuition', minutes: '40', result: 'Howard Heaverad', date: '24/01/2025', completed: 'Yes' },
-                                                            { type: 'One po one Maths tuition', minutes: '20', result: 'Maths Equation', date: '23/01/2025', completed: 'No' },
-                                                            { type: 'One po one Maths tuition', minutes: '15', result: 'Vertreibt Wunderbrügge', date: '22/01/2025', completed: 'No' },
-                                                            { type: 'One po one Maths tuition', minutes: '35', result: 'Practice Register', date: '21/01/2025', completed: 'No' },
-                                                        ].map((exercise, idx) => (
-                                                            <tr key={idx} className="border-b border-gray-200">
-                                                                <td className="py-2 px-2 text-gray-700">{exercise.type}</td>
-                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.minutes}</td>
-                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.result}</td>
-                                                                <td className="py-2 px-2 text-center text-gray-700">{exercise.date}</td>
-                                                                <td className="py-2 px-2 text-center">
-                                                                    <span className={`px-2 py-0.5 rounded text-xs ${exercise.completed === 'Yes' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                                                        {exercise.completed}
-                                                                    </span>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Right Column - Cognitive Domains */}
-                                    <div className="lg:col-span-1">
-                                        <div className="bg-gray-50 rounded-lg p-4 max-h-68 ">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h3 className="text-sm font-semibold text-gray-900">Cognitive domains</h3>
-                                                <span className="px-2 py-1 bg-gray-900 text-white text-xs font-semibold rounded">TODAY</span>
-                                            </div>
-
-                                            <div className="space-y-4">
-                                                {/* Inhibitory control */}
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-xs text-gray-700">Inhibitory control</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-xs text-gray-500">30%</span>
-                                                            <span className="text-xs text-gray-500">70%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '70%' }}></div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Selective attention */}
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-xs text-gray-700">Selective attention</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-xs text-gray-500">45%</span>
-                                                            <span className="text-xs text-gray-500">55%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '55%' }}></div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Working memory */}
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-xs text-gray-700">Working memory</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-xs text-gray-500">25%</span>
-                                                            <span className="text-xs text-gray-500">75%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '75%' }}></div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Cognitive flexibility */}
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-xs text-gray-700">Cognitive flexibility</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-xs text-gray-500">50%</span>
-                                                            <span className="text-xs text-gray-500">44%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '44%' }}></div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Sustained attention */}
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-xs text-gray-700">Sustained attention</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-xs text-gray-500">34%</span>
-                                                            <span className="text-xs text-gray-500">60%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full" style={{ width: '60%' }}></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <p className="text-xs text-gray-500">📈 +4.50% from last week</p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            {/* Existing Charts */}
-                            {/* <div>
+                    {/* Existing Charts */}
+                    {/* <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Pain & Mood Trends</h3>
                                 <div className="bg-gray-50 rounded-lg p-4">
                                     <Line data={progressChartData} options={chartOptions} />
@@ -1000,8 +1233,6 @@ const UserProfile: React.FC = () => {
                                     <Line data={exerciseSleepChartData} options={chartOptions} />
                                 </div>
                             </div> */}
-                        </div>
-                    )}
                 </div>
             </div>
         </div >
