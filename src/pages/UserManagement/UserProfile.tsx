@@ -954,10 +954,12 @@ const UserProfile: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 mt-6 bg-gray-50 p-4 rounded-lg">Questionnaires Section</h2>
+                    {/* Biological Section */}
                     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-6">Biological</h2>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                             {/* Pain Diary Table */}
                             <div className="bg-gray-50 rounded-lg p-4">
                                 <div className="flex items-center justify-between mb-4">
@@ -1065,6 +1067,45 @@ const UserProfile: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-sm font-semibold text-gray-900">Select questionnaires</h3>
+                                    <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
+                                </div>
+                                <div className="h-48 bg-white rounded p-2 relative">
+                                    <svg width="100%" height="100%" viewBox="0 0 320 170">
+                                        {/* Y-axis labels */}
+                                        <text x="26" y="18" fontSize="12" fill="#9ca3af" textAnchor="end">100</text>
+                                        <text x="26" y="53" fontSize="12" fill="#9ca3af" textAnchor="end">75</text>
+                                        <text x="26" y="88" fontSize="12" fill="#9ca3af" textAnchor="end">50</text>
+                                        <text x="26" y="123" fontSize="12" fill="#9ca3af" textAnchor="end">25</text>
+                                        <text x="26" y="155" fontSize="12" fill="#9ca3af" textAnchor="end">0</text>
+                                        {/* Y-axis line */}
+                                        <line x1="30" y1="10" x2="30" y2="150" stroke="#d1d5db" strokeWidth="1" />
+                                        {/* X-axis line */}
+                                        <line x1="30" y1="150" x2="310" y2="150" stroke="#d1d5db" strokeWidth="1" />
+                                        {/* Grid lines */}
+                                        <line x1="30" y1="15" x2="310" y2="15" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="50" x2="310" y2="50" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="85" x2="310" y2="85" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="120" x2="310" y2="120" stroke="#f3f4f6" strokeWidth="1" />
+                                        {/* Blue line (upper) */}
+                                        <path d="M 50,110 L 90,90 L 130,80 L 170,60 L 210,55 L 250,50 L 290,43" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                                        {/* Purple line (lower) */}
+                                        <path d="M 50,130 L 90,125 L 130,120 L 170,115 L 210,110 L 250,108 L 290,105" stroke="#8b5cf6" strokeWidth="2" fill="none" />
+                                        {/* Shaded area */}
+                                        <path d="M 50,130 L 90,125 L 130,120 L 170,115 L 210,110 L 250,108 L 290,105 L 290,150 L 50,150 Z" fill="#e0e7ff" opacity="0.3" />
+                                        {/* X-axis labels */}
+                                        <text x="50" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jan</text>
+                                        <text x="90" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Feb</text>
+                                        <text x="130" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Mar</text>
+                                        <text x="170" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Apr</text>
+                                        <text x="210" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">May</text>
+                                        <text x="250" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jun</text>
+                                        <text x="290" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jul</text>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1113,19 +1154,37 @@ const UserProfile: React.FC = () => {
                                     <h3 className="text-sm font-semibold text-gray-900">Select questionnaires</h3>
                                     <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
                                 </div>
-                                <div className="h-48 bg-white rounded p-4 relative">
-                                    <svg width="100%" height="100%" viewBox="0 0 300 150">
+                                <div className="h-48 bg-white rounded p-2 relative">
+                                    <svg width="100%" height="100%" viewBox="0 0 320 170">
+                                        {/* Y-axis labels */}
+                                        <text x="26" y="18" fontSize="12" fill="#9ca3af" textAnchor="end">100</text>
+                                        <text x="26" y="53" fontSize="12" fill="#9ca3af" textAnchor="end">75</text>
+                                        <text x="26" y="88" fontSize="12" fill="#9ca3af" textAnchor="end">50</text>
+                                        <text x="26" y="123" fontSize="12" fill="#9ca3af" textAnchor="end">25</text>
+                                        <text x="26" y="155" fontSize="12" fill="#9ca3af" textAnchor="end">0</text>
+                                        {/* Y-axis line */}
+                                        <line x1="30" y1="10" x2="30" y2="150" stroke="#d1d5db" strokeWidth="1" />
+                                        {/* X-axis line */}
+                                        <line x1="30" y1="150" x2="310" y2="150" stroke="#d1d5db" strokeWidth="1" />
                                         {/* Grid lines */}
-                                        <line x1="0" y1="140" x2="300" y2="140" stroke="#e5e7eb" strokeWidth="1" />
-                                        <line x1="0" y1="105" x2="300" y2="105" stroke="#e5e7eb" strokeWidth="1" />
-                                        <line x1="0" y1="70" x2="300" y2="70" stroke="#e5e7eb" strokeWidth="1" />
-                                        <line x1="0" y1="35" x2="300" y2="35" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="30" y1="15" x2="310" y2="15" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="50" x2="310" y2="50" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="85" x2="310" y2="85" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="120" x2="310" y2="120" stroke="#f3f4f6" strokeWidth="1" />
                                         {/* Blue line (upper) */}
-                                        <path d="M 20,100 L 60,80 L 100,70 L 140,50 L 180,45 L 220,40 L 260,35" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                                        <path d="M 50,110 L 90,90 L 130,80 L 170,60 L 210,55 L 250,50 L 290,43" stroke="#3b82f6" strokeWidth="2" fill="none" />
                                         {/* Purple line (lower) */}
-                                        <path d="M 20,120 L 60,115 L 100,110 L 140,105 L 180,100 L 220,98 L 260,95" stroke="#8b5cf6" strokeWidth="2" fill="none" />
+                                        <path d="M 50,130 L 90,125 L 130,120 L 170,115 L 210,110 L 250,108 L 290,105" stroke="#8b5cf6" strokeWidth="2" fill="none" />
                                         {/* Shaded area */}
-                                        <path d="M 20,120 L 60,115 L 100,110 L 140,105 L 180,100 L 220,98 L 260,95 L 260,140 L 20,140 Z" fill="#e0e7ff" opacity="0.3" />
+                                        <path d="M 50,130 L 90,125 L 130,120 L 170,115 L 210,110 L 250,108 L 290,105 L 290,150 L 50,150 Z" fill="#e0e7ff" opacity="0.3" />
+                                        {/* X-axis labels */}
+                                        <text x="50" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jan</text>
+                                        <text x="90" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Feb</text>
+                                        <text x="130" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Mar</text>
+                                        <text x="170" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Apr</text>
+                                        <text x="210" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">May</text>
+                                        <text x="250" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jun</text>
+                                        <text x="290" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jul</text>
                                     </svg>
                                 </div>
                             </div>
@@ -1189,19 +1248,37 @@ const UserProfile: React.FC = () => {
                                     <h3 className="text-sm font-semibold text-gray-900">Select questionnaires</h3>
                                     <button className="text-xs text-blue-600 hover:text-blue-700">Load & Month ↓</button>
                                 </div>
-                                <div className="h-48 bg-white rounded p-4 relative">
-                                    <svg width="100%" height="100%" viewBox="0 0 300 150">
+                                <div className="h-48 bg-white rounded  relative">
+                                    <svg width="100%" height="100%" viewBox="0 0 320 170">
+                                        {/* Y-axis labels */}
+                                        <text x="26" y="18" fontSize="12" fill="#9ca3af" textAnchor="end">100</text>
+                                        <text x="26" y="53" fontSize="12" fill="#9ca3af" textAnchor="end">75</text>
+                                        <text x="26" y="88" fontSize="12" fill="#9ca3af" textAnchor="end">50</text>
+                                        <text x="26" y="123" fontSize="12" fill="#9ca3af" textAnchor="end">25</text>
+                                        <text x="26" y="155" fontSize="12" fill="#9ca3af" textAnchor="end">0</text>
+                                        {/* Y-axis line */}
+                                        <line x1="30" y1="10" x2="30" y2="150" stroke="#d1d5db" strokeWidth="1" />
+                                        {/* X-axis line */}
+                                        <line x1="30" y1="150" x2="310" y2="150" stroke="#d1d5db" strokeWidth="1" />
                                         {/* Grid lines */}
-                                        <line x1="0" y1="140" x2="300" y2="140" stroke="#e5e7eb" strokeWidth="1" />
-                                        <line x1="0" y1="105" x2="300" y2="105" stroke="#e5e7eb" strokeWidth="1" />
-                                        <line x1="0" y1="70" x2="300" y2="70" stroke="#e5e7eb" strokeWidth="1" />
-                                        <line x1="0" y1="35" x2="300" y2="35" stroke="#e5e7eb" strokeWidth="1" />
+                                        <line x1="30" y1="15" x2="310" y2="15" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="50" x2="310" y2="50" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="85" x2="310" y2="85" stroke="#f3f4f6" strokeWidth="1" />
+                                        <line x1="30" y1="120" x2="310" y2="120" stroke="#f3f4f6" strokeWidth="1" />
                                         {/* Blue line (upper) */}
-                                        <path d="M 20,110 L 60,95 L 100,85 L 140,75 L 180,65 L 220,58 L 260,52" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                                        <path d="M 50,118 L 90,103 L 130,93 L 170,83 L 210,73 L 250,66 L 290,60" stroke="#3b82f6" strokeWidth="2" fill="none" />
                                         {/* Purple line (lower) */}
-                                        <path d="M 20,125 L 60,122 L 100,118 L 140,115 L 180,110 L 220,108 L 260,105" stroke="#8b5cf6" strokeWidth="2" fill="none" />
+                                        <path d="M 50,133 L 90,130 L 130,126 L 170,123 L 210,118 L 250,116 L 290,113" stroke="#8b5cf6" strokeWidth="2" fill="none" />
                                         {/* Shaded area */}
-                                        <path d="M 20,125 L 60,122 L 100,118 L 140,115 L 180,110 L 220,108 L 260,105 L 260,140 L 20,140 Z" fill="#e0e7ff" opacity="0.3" />
+                                        <path d="M 50,133 L 90,130 L 130,126 L 170,123 L 210,118 L 250,116 L 290,113 L 290,150 L 50,150 Z" fill="#e0e7ff" opacity="0.3" />
+                                        {/* X-axis labels */}
+                                        <text x="50" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jan</text>
+                                        <text x="90" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Feb</text>
+                                        <text x="130" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Mar</text>
+                                        <text x="170" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Apr</text>
+                                        <text x="210" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">May</text>
+                                        <text x="250" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jun</text>
+                                        <text x="290" y="163" fontSize="12" fill="#9ca3af" textAnchor="middle">Jul</text>
                                     </svg>
                                 </div>
                             </div>
